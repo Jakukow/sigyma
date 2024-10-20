@@ -5,27 +5,23 @@ import { UserAvatar } from "./user-avatar";
 
 export const Header = () => {
   return (
-    <header className=" flex items-center justify-between p-6 bg-blue-600 shadow-blue-800 shadow-sm">
+    <header className=" flex items-center justify-between p-6 bg-white">
       <Image
         alt="logotype"
         src="/logotype.svg"
-        width={100}
+        width={126}
         height={50}
         className="ml-5 hover:cursor-pointer"
       />
-      <div className="mr-5 flex items-center gap-x-3">
-        <Button
-          variant="link"
-          className=" text-white hover:-translate-y-1 transition-all"
-        >
-          <Search />
-        </Button>
-        <Button
-          variant="link"
-          className=" text-white hover:-translate-y-1 transition-all"
-        >
-          <Bell />
-        </Button>
+      <div className="mr-5 flex items-center gap-x-6">
+        <div className="mr-5  flex gap-x-10">
+          <button className=" text-blue-600 hover:-translate-y-1 transition-all">
+            <Search />
+          </button>
+          <button className=" text-blue-600 hover:-translate-y-1 transition-all">
+            <Bell />
+          </button>
+        </div>
 
         <UserAvatar />
       </div>
