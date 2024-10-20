@@ -26,7 +26,7 @@ export const UserAvatar = async () => {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar className="size-8 text-white font-bold hover:-translate-y-1 transition-all">
-          <AvatarFallback className="bg-blue-600">
+          <AvatarFallback className="prim">
             {!!avatarfallback ? avatarfallback[0] : "?"}
           </AvatarFallback>
         </Avatar>
