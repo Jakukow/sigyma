@@ -1,7 +1,7 @@
 import Image from "next/image";
 
-import { Bell, Search } from "lucide-react";
-import { UserAvatar } from "./user-avatar";
+import { UserAvatar } from "../user-avatar";
+import { NavbarButtons } from "./header-buttons";
 
 export const Header = () => {
   return (
@@ -14,14 +14,7 @@ export const Header = () => {
         className="ml-5 hover:cursor-pointer"
       />
       <div className="mr-5 flex items-center gap-x-6">
-        <div className="mr-5  flex gap-x-10">
-          <button className=" text-prim hover:-translate-y-1 transition-all">
-            <Search />
-          </button>
-          <button className=" text-prim hover:-translate-y-1 transition-all">
-            <Bell />
-          </button>
-        </div>
+        <NavbarButtons />
 
         <UserAvatar />
       </div>

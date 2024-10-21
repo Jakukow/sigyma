@@ -1,5 +1,5 @@
-import { Header } from "@/components/header";
-import { AppSidebar } from "@/components/sidebar-cards";
+import { Header } from "@/components/navbar/header";
+import { AppSidebar } from "@/components/sidebar/sidebar-cards";
 import { PropsWithChildren } from "react";
 
 const DashboardLayout = ({ children }: PropsWithChildren) => {

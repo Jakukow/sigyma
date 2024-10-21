@@ -11,6 +11,9 @@ body,
 .prim {
   background-color: #a593f3;
 }
+:hover .prim-h {
+  background-color: #a593f3c0;
+}
 .text-prim {
   color: #a593f3;
 }
