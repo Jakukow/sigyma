@@ -5,11 +5,11 @@ import { PropsWithChildren } from "react";
 const DashboardLayout = ({ children }: PropsWithChildren) => {
   return (
     <>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col ">
         <Header />
-        <div className="flex flex-row h-full w-full">
+        <div className="flex flex-row h-full ">
           <AppSidebar />
-          <main>{children}</main>
+          <main className="w-full flex ">{children}</main>
         </div>
       </div>
     </>
