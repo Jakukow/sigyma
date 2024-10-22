@@ -9,7 +9,7 @@ const DashboardLayout = ({ children }: PropsWithChildren) => {
         <Header />
         <div className="flex flex-row h-full ">
           <AppSidebar />
-          <main className="w-full flex ">{children}</main>
+          <main className="w-full  flex ">{children}</main>
         </div>
       </div>
     </>

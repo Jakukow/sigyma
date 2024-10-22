@@ -2,12 +2,12 @@ import { cn } from "@/lib/utils";
 import { ArrowDown, ArrowUp } from "lucide-react";
 
 export const Progress = () => {
-  const progressed = false;
+  const progressed = true;
   const progressValue = 25;
   return (
-    <div className="flex flex-col h-1/2 shadow rounded-3xl w-full   gap-y-3 items-center">
-      <div className="ml-6 mt-6 text-center text-muted-foreground">
-        Average Monthly Progress
+    <div className="flex flex-col h-1/2 shadow rounded-3xl w-full justify-around items-center">
+      <div className="ml-6 mt-6 text-center font-medium text-muted-foreground ">
+        AVERAGE MONTHLY PROGRESS
       </div>
       <div
         className={cn(
@@ -20,8 +20,13 @@ export const Progress = () => {
           {progressValue}%
         </div>
       </div>
-      <span className={cn(progressed ? "text-emerald-400" : "text-red-600")}>
-        {progressed ? "Great Work!" : "Try Harder!"}
+      <span
+        className={cn(
+          "font-medium",
+          progressed ? "text-emerald-400" : "text-red-600"
+        )}
+      >
+        {progressed ? "GREAT WORK!" : "TRY HARDER!"}
       </span>
     </div>
   );

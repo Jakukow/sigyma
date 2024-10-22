@@ -1,5 +1,6 @@
 import { Hero } from "@/components/dashboard/hero";
 import { Progress } from "@/components/dashboard/progress";
+import { Streak } from "@/components/dashboard/streak";
 
 export default function Home() {
   return (
@@ -13,9 +14,9 @@ export default function Home() {
       <div className="flex flex-row w-full gap-x-6 h-1/2">
         <div className="flex   w-1/3 shadow rounded-3xl">das</div>
         <div className="flex   w-1/3 shadow rounded-3xl">das</div>
-        <div className="flex flex-col w-[34%] gap-y-5">
+        <div className="flex h-full flex-col w-[34%] gap-y-5">
           <Progress />
-          <div className="flex h-1/2 shadow rounded-3xl"></div>
+          <Streak />
         </div>
       </div>
     </div>
