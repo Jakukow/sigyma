@@ -1,5 +1,6 @@
 import { Goal } from "@/components/dashboard/goal";
 import { Hero } from "@/components/dashboard/hero";
+import { Leaderboard } from "@/components/dashboard/leaderboard";
 import { Progress } from "@/components/dashboard/progress";
 import { Streak } from "@/components/dashboard/streak";
 
@@ -12,7 +13,7 @@ export default function Home() {
       </div>
       <div className="flex flex-row w-full gap-x-6 h-1/2">
         <Goal />
-        <div className="flex   w-1/3 shadow rounded-3xl"></div>
+        <Leaderboard />
         <div className="flex h-full flex-col w-[34%] gap-y-5">
           <Progress />
           <Streak />

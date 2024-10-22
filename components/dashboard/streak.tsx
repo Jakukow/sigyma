@@ -19,7 +19,7 @@ export const Streak = () => {
               key={i}
               className="flex flex-col items-center h-full justify-around"
             >
-              <Check className="prim rounded-full p-1 text-white " />
+              <Check className="prim rounded-full p-1 text-white animate-bounce" />
               <span className="text-muted-foreground/35 font-medium">
                 {dayT[i]}
               </span>
