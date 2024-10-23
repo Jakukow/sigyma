@@ -37,7 +37,7 @@ export const Progress = () => {
     return () => clearInterval(timer);
   }, [value, progressed]);
   return (
-    <div className="flex flex-col h-1/2 shadow rounded-3xl w-full justify-around items-center">
+    <div className=" bg-white flex flex-col h-1/2 shadow rounded-3xl w-full justify-around items-center">
       <div className="ml-6 mt-2 text-center font-semibold tracking-widest text-muted-foreground ">
         AVERAGE MONTHLY PROGRESS
       </div>

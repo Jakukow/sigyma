@@ -1,6 +1,3 @@
-import { Crown } from "lucide-react";
-import { Separator } from "./ui/separator";
-
 export const LeaderboardPosition = () => {
   return (
     <div className="flex flex-col gap-y-3 justify-center ">

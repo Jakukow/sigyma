@@ -1,3 +1,4 @@
+import { DashboardChart } from "@/components/dashboard/chart-dashboard";
 import { Goal } from "@/components/dashboard/goal";
 import { Hero } from "@/components/dashboard/hero";
 import { Leaderboard } from "@/components/dashboard/leaderboard";
@@ -9,7 +10,7 @@ export default function Home() {
     <div className="mt-11  mr-11 flex flex-col w-full h-[full] gap-y-5">
       <div className="flex flex-row gap-x-5 w-full h-1/2">
         <Hero />
-        <div className="w-1/3 shadow bg-orange-100 border-orange-200 border-4 rounded-3xl"></div>
+        <DashboardChart />
       </div>
       <div className="flex flex-row w-full gap-x-6 h-1/2">
         <Goal />
