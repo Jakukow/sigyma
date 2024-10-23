@@ -1,7 +1,10 @@
+"use client";
 import { Button } from "@/components/ui/button";
+import { useModal } from "@/hooks/use-modal-store";
 import { Search } from "lucide-react";
 
 export const ExerciseNavbar = () => {
+  const { onOpen } = useModal();
   return (
     <div className="w-full flex h-[9%] items-center justify-between prim">
       <span className=" ml-10 font-semibold tracking-widest text-white">
@@ -11,7 +14,10 @@ export const ExerciseNavbar = () => {
         <span className="ml-3 text-white font-light">Search...</span>
         <Search className="mr-3 text-white" />
       </button>
-      <Button className="mr-10 bg-white text-prim hover:bg-slate-100">
+      <Button
+        onClick={() => onOpen("createExercise")}
+        className="mr-10 bg-white text-prim hover:bg-slate-100"
+      >
         Add new exercise
       </Button>
     </div>
