@@ -2,12 +2,7 @@
 
 import { Bar, BarChart, LabelList, XAxis } from "recharts";
 
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartConfig, ChartContainer } from "@/components/ui/chart";
 
 export const description = "A bar chart with a label";
 const chartData = [

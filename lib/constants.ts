@@ -18,7 +18,7 @@ export const sidebarData = [
   },
   {
     Icon: Route,
-    label: "Training Plans",
+    label: "Training Plan",
     path: "/plans",
   },
   {
