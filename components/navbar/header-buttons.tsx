@@ -2,7 +2,7 @@
 import { Bell, Search } from "lucide-react";
 export const NavbarButtons = () => {
   return (
-    <div className="mr-5  flex gap-x-10">
+    <div className="mr-5  flex gap-x-4 md:gap-x-10">
       <button
         onClick={() => {}}
         className=" text-prim hover:-translate-y-1 transition-all"

@@ -23,7 +23,7 @@ export const ExerciseItem = ({
         <span className="text-xs text-muted-foreground"> /{unit}</span>
       </div>
 
-      <p className="text-sm  ">{description}</p>
+      <p className="text-sm max-w-3xl ">{description}</p>
       <div
         className={cn(
           "flex items-center mr-4 gap-x-2",

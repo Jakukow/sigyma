@@ -62,44 +62,42 @@ export const exerciseList = [
   {
     exName: "Deadlift",
     exDesc:
-      "loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
+      "Loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
+    exUnit: "Kilograms",
+    default: true,
+  },
+  {
+    exName: "Plank",
+    exDesc:
+      "Held in a push-up-like position, with the body's weight borne on forearms, elbows, and toes",
+    exUnit: "Seconds",
+    default: true,
+  },
+  {
+    exName: "Back squat",
+    exDesc:
+      "The bar is held on the back of the body upon the upper trapezius muscle, near to the base of the neck",
+    exUnit: "Kilograms",
+    default: true,
+  },
+  {
+    exName: "Pull up",
+    exDesc:
+      "Movement where the body is suspended by the hands, gripping a bar or other implement at a distance typically wider than shoulder-width, and pulled up",
+    exUnit: "Kilograms",
+    default: true,
+  },
+  {
+    exName: "Custom Exercise 1",
+    exDesc: "Custom descripiton 1",
     exUnit: "Kilograms",
     default: false,
   },
   {
-    exName: "Deadlift",
-    exDesc:
-      "loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
-    exUnit: "Kilograms",
-    default: true,
-  },
-  {
-    exName: "Deadlift",
-    exDesc:
-      "loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
-    exUnit: "Kilograms",
-    default: true,
-  },
-  {
-    exName: "Deadlift",
-    exDesc:
-      "loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
-    exUnit: "Kilograms",
-    default: true,
-  },
-  {
-    exName: "Deadlift",
-    exDesc:
-      "loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
-    exUnit: "Kilograms",
-    default: true,
-  },
-  {
-    exName: "Deadlift",
-    exDesc:
-      "loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
-    exUnit: "Kilograms",
-    default: true,
+    exName: "Custom Exercise 2",
+    exDesc: "Custom descripiton 2",
+    exUnit: "Seconds",
+    default: false,
   },
   {
     exName: "Deadlift",

@@ -7,7 +7,7 @@ import { Streak } from "@/components/dashboard/streak";
 
 export default function Home() {
   return (
-    <div className="mt-11  mr-11 flex flex-col w-full h-[full] gap-y-5">
+    <div className="mt-11  mx-5 flex flex-col w-full h-[full] gap-y-5">
       <div className="flex flex-row gap-x-5 w-full h-1/2">
         <Hero />
         <DashboardChart />
