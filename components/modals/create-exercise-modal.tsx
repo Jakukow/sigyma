@@ -22,13 +22,27 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
+enum ExerciseType {
+  Kilograms = "Kilograms",
+  Seconds = "Seconds",
+}
 const formSchema = z.object({
   name: z.string().min(1, {
-    message: "Server name is required.",
+    message: "Exercise name is required.",
   }),
   description: z.string().min(1, {
-    message: "Server image is required.",
+    message: "Exercise description is required.",
+  }),
+  type: z.nativeEnum(ExerciseType, {
+    errorMap: () => ({ message: "Invalid exercise type" }),
   }),
 });
 export const CreateExerciseModal = () => {
@@ -40,6 +54,7 @@ export const CreateExerciseModal = () => {
     defaultValues: {
       name: "",
       description: "",
+      type: "",
     },
   });
 
@@ -99,6 +114,40 @@ export const CreateExerciseModal = () => {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="uppercase text-xs font-medium text-prim ">
+                      Exercise unit
+                    </FormLabel>
+                    <Select
+                      disabled={isLoading}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="bg-zinc-300/50 border-0 focucs:ring-0 text-black ring-offset-0 foucs:ring-offset-0 capitalize outline-none">
+                          <SelectValue placeholder="Select a unit type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.values(ExerciseType).map((type) => (
+                          <SelectItem
+                            key={type}
+                            value={type}
+                            className="capitalize"
+                          >
+                            {type.toLowerCase()}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

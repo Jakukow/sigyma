@@ -33,6 +33,28 @@ body {
       rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
   }
 }
+.visibility-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+/* Niestandardowy styl scrollbara */
+.no-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.no-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.no-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #a593f3;
+  border-radius: 10px;
+  border: none;
+}
+
+.no-scrollbar::-webkit-scrollbar-button {
+  display: none;
+}
 
 @layer base {
   :root {
