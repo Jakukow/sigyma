@@ -8,17 +8,19 @@ const ExercisePage = () => {
       <ExerciseNavbar />
       <div className=" flex h-full w-full items-center  ">
         <div className="flex h-[600px] w-full flex-col mx-4 bg-slate-100 rounded-xl overflow-y-auto no-scrollbar">
-          {exerciseList.map((ex) => {
-            return (
-              <ExerciseItem
-                key={ex.exName}
-                name={ex.exName}
-                description={ex.exDesc}
-                unit={ex.exUnit}
-                defaultEx={ex.default}
-              />
-            );
-          })}
+          <div className="flex flex-col w-full h-full mt-2 gap-y-2">
+            {exerciseList.map((ex) => {
+              return (
+                <ExerciseItem
+                  key={ex.exName}
+                  name={ex.exName}
+                  description={ex.exDesc}
+                  unit={ex.exUnit}
+                  defaultEx={ex.default}
+                />
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>

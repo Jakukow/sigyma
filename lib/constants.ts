@@ -100,9 +100,9 @@ export const exerciseList = [
     default: false,
   },
   {
-    exName: "Deadlift",
+    exName: "Bench Press",
     exDesc:
-      "loaded barbell or bar is lifted off the ground to the level of the hips, torso perpendicular to the floor",
+      "Person presses a weight upwards while lying horizontally on a weight training bench.",
     exUnit: "Kilograms",
     default: true,
   },
