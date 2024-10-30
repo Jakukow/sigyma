@@ -120,7 +120,17 @@ export const trainingsList: TrainingDay[] = [
   },
   {
     day: "Tuesday",
-    trainings: ["Allaala"],
+    trainings: [
+      "Allaala",
+      "Allaala",
+      "Allaala",
+      "Allaala",
+      "Allaala",
+      "Allaala",
+      "Allaala",
+      "Allaala",
+      "dasdas",
+    ],
   },
   {
     day: "Wednesday",

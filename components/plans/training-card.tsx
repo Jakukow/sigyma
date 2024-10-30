@@ -7,15 +7,15 @@ interface TrainingCardProps {
 
 export const TrainingCard = ({ day, training }: TrainingCardProps) => {
   return (
-    <div className="p-1 hover:scale-95 overflow-visible transition-all ">
+    <div className="p-1 ">
       <div>
-        <div className="flex h-[60vh] flex-col  items-center justify-between overflow-hidden  bg-white shadow rounded-xl ">
+        <div className="flex min-h-[50vh] max-h-[80vh] flex-col items-center justify-between overflow-hidden bg-white shadow rounded-xl ">
           <div className="prim py-2 w-full justify-center flex text-white">
             <span className="text-xl font-light">{day}</span>
           </div>
 
-          <div className="flex w-full  h-full ">
-            <div className="m-4 w-full  flex flex-col justify-center items-center rounded-xl bg-slate-100">
+          <div className="flex w-full  h-full  ">
+            <div className="m-4  w-full h-[45vh] no-scrollbar flex flex-col justify-start overflow-y-auto  items-center rounded-xl bg-slate-100 ">
               {training.some((training) => training) ? (
                 training.map((training, index) => (
                   <TrainingSingle key={index} training={training} />
@@ -28,8 +28,8 @@ export const TrainingCard = ({ day, training }: TrainingCardProps) => {
             </div>
           </div>
 
-          <div className="prim py-2 w-full justify-center flex text-white">
-            <button className="text-xl font-light hover:opacity-50 transition-all">
+          <div className="prim py-2 w-full justify-center flex text-white mt-2">
+            <button className="text-xl font-light hover:opacity-50 transition-all flex-shrink-0">
               New Training
             </button>
           </div>
