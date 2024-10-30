@@ -15,7 +15,7 @@ export const ExerciseItem = ({
   defaultEx,
 }: ExerciseItemProps) => {
   return (
-    <div className="justify-between mx-2 items-center py-4  gap-x-5 rounded-xl flex bg-white shadow">
+    <div className="justify-between mx-2 items-center py-4 hover:opacity-50 transition-all  gap-x-5 rounded-xl flex bg-white shadow">
       <div className="flex items-center w-full">
         <div className="flex flex-shrink-0 items-center w-1/3">
           <span className="ml-5 font-semibold tracking-widest text-muted-foreground">

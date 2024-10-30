@@ -107,3 +107,39 @@ export const exerciseList = [
     default: true,
   },
 ];
+
+interface TrainingDay {
+  day: string;
+  trainings: string[];
+}
+
+export const trainingsList: TrainingDay[] = [
+  {
+    day: "Monday",
+    trainings: [""],
+  },
+  {
+    day: "Tuesday",
+    trainings: ["Allaala"],
+  },
+  {
+    day: "Wednesday",
+    trainings: ["Allaala", "Kaszana"],
+  },
+  {
+    day: "Thursday",
+    trainings: [""],
+  },
+  {
+    day: "Friday",
+    trainings: [""],
+  },
+  {
+    day: "Saturday",
+    trainings: ["Allaala", "Plecy kotka"],
+  },
+  {
+    day: "Sunday",
+    trainings: ["Allaala", "WARRRUUUUm"],
+  },
+];
