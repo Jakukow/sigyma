@@ -1,5 +1,19 @@
-const MapPage = () => {
-  return <div className="">hejsia</div>;
-};
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
-export default MapPage;
+export default function MyPage() {
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("@/components/map/map"), {
+        loading: () => <p>A map is loading</p>,
+        ssr: false,
+      }),
+    []
+  );
+
+  return (
+    <div>
+      <Map />
+    </div>
+  );
+}
