@@ -1,3 +1,5 @@
+"use client";
+import { useModal } from "@/hooks/use-modal-store";
 import { TrainingSingle } from "./training-single";
 
 interface TrainingCardProps {
@@ -6,6 +8,8 @@ interface TrainingCardProps {
 }
 
 export const TrainingCard = ({ day, training }: TrainingCardProps) => {
+  const { onOpen } = useModal();
+
   return (
     <div className="p-1 ">
       <div>
@@ -29,7 +33,13 @@ export const TrainingCard = ({ day, training }: TrainingCardProps) => {
           </div>
 
           <div className="prim py-2 w-full justify-center flex text-white mt-2">
-            <button className="text-xl font-light hover:opacity-50 transition-all flex-shrink-0">
+            <button
+              onClick={() => {
+                onOpen("createTraining");
+                console.log("he");
+              }}
+              className="text-xl font-light hover:opacity-50 transition-all flex-shrink-0"
+            >
               New Training
             </button>
           </div>

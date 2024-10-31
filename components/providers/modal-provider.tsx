@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { CreateExerciseModal } from "../modals/create-exercise-modal";
+import { CreateTrainingModal } from "../modals/create-training-modal";
 
 export function ModalProvider() {
   const [isMounted, setIsMounted] = useState(false);
@@ -16,6 +17,7 @@ export function ModalProvider() {
 
   return (
     <>
+      <CreateTrainingModal />
       <CreateExerciseModal />
     </>
   );

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type ModalType = "createExercise";
+export type ModalType = "createExercise" | "createTraining";
 
 interface ModalData {
   server?: string;

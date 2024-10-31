@@ -11,7 +11,7 @@ export const TrainingSingle = ({ training }: TrainingSingleProps) => {
         <span className="ml-2 font-semibold tracking-widest text-muted-foreground">
           {training}
         </span>
-        <div className="flex items-center mr-2 gap-x-2">
+        <div className="flex items-center mr-2g gap-x-2">
           <button>
             <Eye className="text-prim hover:-translate-y-1 transition-all" />
           </button>
