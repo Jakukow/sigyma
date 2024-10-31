@@ -121,7 +121,7 @@ export const CreateTrainingModal = () => {
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
-      <DialogContent className="bg-white text-prim p-0 max-h-[80vh] h-full flex flex-col">
+      <DialogContent className="bg-white text-prim p-0 max-h-[80vh] h-full flex flex-col ">
         <DialogHeader className="pt-8 px-6 flex-shrink-0">
           <DialogTitle className="text-2xl text-center font-bold tracking-wide">
             ADD NEW TRAINING PLAN FOR {"MONDAY"}
@@ -130,7 +130,7 @@ export const CreateTrainingModal = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col space-y-8 h-full"
+            className="flex flex-col space-y-8 h-full justify-between pb-5"
           >
             <div className="space-y-8 px-6 flex-shrink-0">
               <FormField
