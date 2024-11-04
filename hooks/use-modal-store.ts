@@ -1,12 +1,18 @@
+import { LngLat } from "maplibre-gl";
 import { create } from "zustand";
 
-export type ModalType = "createExercise" | "createTraining";
+export type ModalType =
+  | "createExercise"
+  | "createTraining"
+  | "createMarker"
+  | "showMarker";
 
 interface ModalData {
-  server?: string;
-  channel?: string;
-  channelType?: string;
-  apiUrl?: string;
+  name?: string;
+  address?: string;
+  description?: string;
+
+  lngLat?: LngLat;
 }
 
 interface ModalStore {

@@ -106,6 +106,34 @@ export const exerciseList = [
     exUnit: "Kilograms",
     default: true,
   },
+  {
+    exName: "Bench Press",
+    exDesc:
+      "Person presses a weight upwards while lying horizontally on a weight training bench.",
+    exUnit: "Kilograms",
+    default: true,
+  },
+  {
+    exName: "Bench Press",
+    exDesc:
+      "Person presses a weight upwards while lying horizontally on a weight training bench.",
+    exUnit: "Kilograms",
+    default: true,
+  },
+  {
+    exName: "Bench Press",
+    exDesc:
+      "Person presses a weight upwards while lying horizontally on a weight training bench.",
+    exUnit: "Kilograms",
+    default: true,
+  },
+  {
+    exName: "Bench Press",
+    exDesc:
+      "Person presses a weight upwards while lying horizontally on a weight training bench.",
+    exUnit: "Kilograms",
+    default: true,
+  },
 ];
 
 interface TrainingDay {
@@ -141,5 +169,27 @@ export const trainingsList: TrainingDay[] = [
   {
     day: "Sunday",
     trainings: ["Allaala", "WARRRUUUUm"],
+  },
+];
+
+export const gymMarkes = [
+  {
+    name: "DAD",
+    description: "DDAA",
+    lngLat: {
+      lng: 20.980869517346406,
+      lat: 52.22957467798605,
+    },
+  },
+];
+export const storedMarkers = [
+  {
+    name: "DAD",
+    city: "Warsaw",
+    street: "DDAA",
+    coordinates: {
+      lng: 20.980869517346406,
+      lat: 52.22957467798605,
+    },
   },
 ];
