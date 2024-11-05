@@ -8,7 +8,7 @@ const ExercisePage = () => {
     <div className="mt-11 mx-5 items-center justify-center flex flex-col w-full h-full shadow bg-white rounded-xl overflow-hidden">
       <ExerciseNavbar />
       <div className=" flex h-full w-full items-center  ">
-        <div className="flex h-[600px] w-full flex-col mx-4 bg-slate-100 rounded-xl ">
+        <div className="flex h-[600px] w-full flex-col mx-4 bg-slate-200 rounded-xl ">
           <ScrollArea className="w-full">
             <div className="flex flex-col w-full h-full mt-2 gap-y-2">
               {exerciseList.map((ex) => {
