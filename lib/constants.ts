@@ -177,8 +177,8 @@ export const gymMarkes = [
     name: "DAD",
     description: "DDAA",
     lngLat: {
-      lng: 20.980869517346406,
-      lat: 52.22957467798605,
+      lng: 19.945,
+      lat: 50.064,
     },
   },
 ];

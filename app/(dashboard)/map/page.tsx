@@ -22,7 +22,7 @@ const MapPage = () => {
 
     mapRef.current = map;
 
-    gymMarkes.forEach(({ name, description, lngLat }) => {
+    gymMarkes.map(({ name, description, lngLat }) => {
       const marker = new maplibregl.Marker().setLngLat(lngLat).addTo(map);
       marker.getElement().addEventListener("click", () => {
         onOpen("showMarker", { name, description });
