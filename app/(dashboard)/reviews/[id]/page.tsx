@@ -1,14 +1,15 @@
 "use client";
 import { ReviewStars } from "@/components/review-stars";
 import { ReviewBar } from "@/components/reviews/review-bar";
-import { ReviewCircle } from "@/components/reviews/review-circle";
 import { SingleReview } from "@/components/reviews/single-review";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Separator } from "@/components/ui/separator";
+import { useModal } from "@/hooks/use-modal-store";
 
 const Review = () => {
+  const { onOpen } = useModal();
   return (
     <div className="mt-11 mx-5 items-center flex  w-full h-full shadow bg-white rounded-xl overflow-hidden">
       <div className="w-1/3 justify-center items-center flex flex-col gap-6 prim h-full  text-white">
@@ -20,7 +21,7 @@ const Review = () => {
           </span>
         </div>
         <Separator className="w-1/2" />
-        <div className="flex  flex-col w-3/5 gap-2 ">
+        <div className="flex  flex-col  gap-2 ">
           <ReviewBar label="Comfort" value={1} />
           <ReviewBar label="Cleanliness" value={2} />
           <ReviewBar label="Equipment" value={3} />
@@ -32,15 +33,20 @@ const Review = () => {
           <span className="font-light">Tarnowskie Góry</span>
         </div>
 
-        <Button className=" bg-white    mt-2 text-prim hover:bg-slate-100 w-1/2">
+        <Button
+          className=" bg-white    mt-2 text-prim hover:bg-slate-100 w-1/2"
+          onClick={() => onOpen("writeReview")}
+        >
           Write Review
         </Button>
       </div>
-      <div className="w-2/3 flex flex-col h-full">
-        <div className="m-4 rounded-xl flex h-full bg-slate-200">
+      <div className="w-2/3 flex flex-col justify-center h-full">
+        <div className="m-4 rounded-xl flex h-[650px] bg-slate-200">
           <div className=" m-4 flex w-full">
             <ScrollArea className="w-full">
               <div className="flex flex-col gap-y-2">
+                <SingleReview />
+                <SingleReview />
                 <SingleReview />
                 <SingleReview />
                 <SingleReview />
