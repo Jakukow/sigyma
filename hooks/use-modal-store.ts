@@ -6,7 +6,8 @@ export type ModalType =
   | "createTraining"
   | "createMarker"
   | "showMarker"
-  | "writeReview";
+  | "writeReview"
+  | "createGoal";
 
 interface ModalData {
   name?: string;
