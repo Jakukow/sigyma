@@ -3,13 +3,27 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useModal } from "@/hooks/use-modal-store";
 import Image from "next/image";
-import { DndContext } from "@dnd-kit/core";
+import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
-import { GripHorizontal } from "lucide-react";
+import { Edit, GripHorizontal, Trash } from "lucide-react";
+import { RadialChart } from "@/components/ui/radial-chart";
+import { chartsDummy } from "@/lib/constants";
 
-const SortableItem = ({ id, children, isDraggable, isDndEnabled }) => {
+interface SortableItemProps {
+  id: string;
+  isDraggable: boolean;
+  isDndEnabled?: boolean;
+  children: React.ReactNode;
+}
+
+const SortableItem = ({
+  id,
+  isDraggable,
+  isDndEnabled,
+  children,
+}: SortableItemProps) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
@@ -17,17 +31,29 @@ const SortableItem = ({ id, children, isDraggable, isDndEnabled }) => {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+  const { onOpen } = useModal();
 
   return (
     <div
       ref={setNodeRef}
       style={isDraggable ? style : undefined}
-      {...(isDraggable ? attributes : {})}
-      {...(isDraggable ? listeners : {})}
-      className="bg-white shadow rounded-xl h-[12.3rem] relative"
+      className="bg-white shadow rounded-xl h-[18.9rem] relative"
     >
       {isDndEnabled && (
-        <GripHorizontal className="absolute top-3 text-muted-foreground right-2 animate-fadeIn" />
+        <>
+          <div className="flex flex-col absolute text-white top-3 left-2 gap-y-1 animate-fadeIn z-10">
+            <Edit
+              className="prim p-1 rounded-full cursor-pointer"
+              onClick={() => onOpen("showMarker")}
+            />
+            <Trash className="bg-red-600 p-1 rounded-full cursor-pointer" />
+          </div>
+          <GripHorizontal
+            className="absolute top-3 text-muted-foreground right-2 outline-none animate-fadeIn cursor-grab"
+            {...(isDraggable ? attributes : {})}
+            {...(isDraggable ? listeners : {})}
+          />
+        </>
       )}
       {children}
     </div>
@@ -36,45 +62,44 @@ const SortableItem = ({ id, children, isDraggable, isDndEnabled }) => {
 
 const GoalsPage = () => {
   const { onOpen } = useModal();
-  const [items, setItems] = useState(
-    Array.from({ length: 9 }, (_, i) => `item-${i + 1}`)
-  );
+  const [items, setItems] = useState(chartsDummy);
   const [backupItems, setBackupItems] = useState([...items]);
   const [isDndEnabled, setIsDndEnabled] = useState(false);
 
-  const handleDragEnd = (event) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (active.id !== over.id) {
+    if (over && active.id !== over.id) {
       setItems((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
-        return arrayMove(items, oldIndex, newIndex);
+        const activeIndex = items.findIndex((item) => item.id === active.id);
+        const overIndex = items.findIndex((item) => item.id === over.id);
+
+        return arrayMove(items, activeIndex, overIndex);
       });
     }
   };
 
   const handleCancel = () => {
-    setItems([...backupItems]); // Revert to the original order
-    setIsDndEnabled(false); // Disable DnD mode
+    setItems([...backupItems]);
+    setIsDndEnabled(false);
   };
 
   const handleSave = () => {
-    setBackupItems([...items]); // Save the current order as the new backup
-    setIsDndEnabled(false); // Disable DnD mode
+    setBackupItems([...items]);
+    setIsDndEnabled(false);
   };
 
-  const handleSwitchChange = (checked) => {
+  const handleSwitchChange = (checked: boolean) => {
     if (checked) {
       setIsDndEnabled(true);
     } else {
-      handleCancel(); // Revert to original order if toggling off
+      handleCancel();
     }
   };
 
   return (
     <div className="mt-11 mx-5 items-center justify-center flex w-full h-full max-h-[750px] shadow bg-white rounded-xl overflow-hidden">
-      <div className="w-1/3 h-full text-white font-bold flex prim">
+      <div className="hidden md:w-1/3 h-full text-white font-bold md:flex prim">
         <div className="flex flex-col m-10 justify-around">
           <span className="md:tracking-widest text-xl md:text-5xl">
             SET YOUR GOALS
@@ -96,7 +121,7 @@ const GoalsPage = () => {
           </Button>
         </div>
       </div>
-      <div className="w-2/3 h-full flex flex-col bg-white">
+      <div className="w-full md:w-2/3 h-full flex flex-col bg-white">
         <div className="prim w-full p-5 flex items-center gap-x-3 justify-between">
           <div className="flex gap-x-3">
             <span className="text-white/80 tracking-wider">Edit Layout</span>
@@ -105,7 +130,7 @@ const GoalsPage = () => {
               onCheckedChange={handleSwitchChange}
             />
           </div>
-          {isDndEnabled && (
+          {isDndEnabled ? (
             <div className="flex justify-end gap-3">
               <Button
                 variant="prim"
@@ -113,6 +138,16 @@ const GoalsPage = () => {
                 onClick={handleSave}
               >
                 Save
+              </Button>
+            </div>
+          ) : (
+            <div className="flex md:hidden justify-end gap-3">
+              <Button
+                variant="prim"
+                className="h-6  animate-fadeIn"
+                onClick={() => onOpen("createGoal")}
+              >
+                SET A NEW GOAL
               </Button>
             </div>
           )}
@@ -123,14 +158,20 @@ const GoalsPage = () => {
               <DndContext onDragEnd={handleDragEnd}>
                 <SortableContext items={items}>
                   <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
-                    {items.map((id) => (
+                    {items.map((goal) => (
                       <SortableItem
-                        key={id}
-                        id={id}
+                        key={goal.id}
+                        id={goal.id}
                         isDraggable={isDndEnabled}
                         isDndEnabled={isDndEnabled}
                       >
-                        {id}
+                        <RadialChart
+                          exerciseName={goal.exerciseName}
+                          score={goal.score}
+                          color={goal.color}
+                          unit={goal.unit}
+                          goal={goal.goal}
+                        />
                       </SortableItem>
                     ))}
                   </div>
@@ -138,9 +179,19 @@ const GoalsPage = () => {
               </DndContext>
             ) : (
               <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
-                {items.map((id) => (
-                  <SortableItem key={id} id={id} isDraggable={isDndEnabled}>
-                    {id}
+                {items.map((goal) => (
+                  <SortableItem
+                    key={goal.id}
+                    id={goal.id}
+                    isDraggable={isDndEnabled}
+                  >
+                    <RadialChart
+                      exerciseName={goal.exerciseName}
+                      score={goal.score}
+                      color={goal.color}
+                      unit={goal.unit}
+                      goal={goal.goal}
+                    />
                   </SortableItem>
                 ))}
               </div>

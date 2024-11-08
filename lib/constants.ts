@@ -106,34 +106,6 @@ export const exerciseList = [
     exUnit: "Kilograms",
     default: true,
   },
-  {
-    exName: "Bench Press",
-    exDesc:
-      "Person presses a weight upwards while lying horizontally on a weight training bench.",
-    exUnit: "Kilograms",
-    default: true,
-  },
-  {
-    exName: "Bench Press",
-    exDesc:
-      "Person presses a weight upwards while lying horizontally on a weight training bench.",
-    exUnit: "Kilograms",
-    default: true,
-  },
-  {
-    exName: "Bench Press",
-    exDesc:
-      "Person presses a weight upwards while lying horizontally on a weight training bench.",
-    exUnit: "Kilograms",
-    default: true,
-  },
-  {
-    exName: "Bench Press",
-    exDesc:
-      "Person presses a weight upwards while lying horizontally on a weight training bench.",
-    exUnit: "Kilograms",
-    default: true,
-  },
 ];
 
 interface TrainingDay {
@@ -191,5 +163,47 @@ export const storedMarkers = [
       lng: 20.980869517346406,
       lat: 52.22957467798605,
     },
+  },
+];
+export const chartsDummy = [
+  {
+    exerciseName: "DeadLift",
+    goal: 150,
+    score: 121,
+    color: "red",
+    unit: "kg",
+    id: "1",
+  },
+  {
+    exerciseName: "Dead Lift",
+    goal: 150,
+    score: 121,
+    color: "#bb23fc",
+    unit: "kg",
+    id: "2",
+  },
+  {
+    exerciseName: "Back Squat",
+    goal: 160,
+    score: 142,
+    color: "#6fd695",
+    unit: "kg",
+    id: "3",
+  },
+  {
+    exerciseName: "Plank",
+    goal: 360,
+    score: 180,
+    color: "#10afe8",
+    unit: "s",
+    id: "4",
+  },
+  {
+    exerciseName: "Pull ups",
+    goal: 10,
+    score: 8,
+    color: "#f78239",
+    unit: "reps",
+    id: "5",
   },
 ];

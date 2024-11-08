@@ -39,11 +39,13 @@ const formSchema = z.object({
   }),
   goal: z
     .string()
-    .transform((val) => Number(val)) // Konwersja na liczbę
+    .transform((val) => Number(val))
     .refine((val) => !isNaN(val) && val > 0 && val > currentScore, {
       message: `Please select a score more than your personal best ${currentScore}`,
     }),
+  color: z.string(),
 });
+
 export const CreateGoalModal = () => {
   const { isOpen, onClose, type } = useModal();
   const isModalOpen = isOpen && type === "createGoal";
@@ -53,6 +55,7 @@ export const CreateGoalModal = () => {
     defaultValues: {
       exercise: "",
       goal: 0,
+      color: "#a593f3",
     },
   });
 
@@ -123,6 +126,26 @@ export const CreateGoalModal = () => {
                         className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 resize-none"
                         placeholder="Enter your goal"
                         type="number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="uppercase text-xs font-medium text-prim ">
+                      Chart Color
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={isLoading}
+                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 resize-none"
+                        type="color"
                         {...field}
                       />
                     </FormControl>
