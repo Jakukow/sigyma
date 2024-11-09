@@ -57,6 +57,24 @@ body {
 .no-scrollbar::-webkit-scrollbar-button {
   display: none;
 }
+/* Niestandardowy styl scrollbara */
+.no-scrollbar1::-webkit-scrollbar {
+  width: 5px;
+}
+
+.no-scrollbar1::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.no-scrollbar1::-webkit-scrollbar-thumb {
+  background-color: white;
+  border-radius: 10px;
+  border: none;
+}
+
+.no-scrollbar1::-webkit-scrollbar-button {
+  display: none;
+}
 
 @layer base {
   :root {
