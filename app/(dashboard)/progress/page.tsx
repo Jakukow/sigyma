@@ -1,9 +1,11 @@
 "use client";
 
+import { Graph } from "@/components/graph";
 import { useState } from "react";
 
 const ProgressPage = () => {
   const [activeTab, setActiveTab] = useState(0);
+  const [trainingId, setTrainingId] = useState("1");
 
   return (
     <div className="mt-11 mx-5 items-center justify-center flex w-full h-full max-h-[750px] shadow bg-white rounded-xl overflow-hidden">
@@ -40,8 +42,29 @@ const ProgressPage = () => {
           </div>
           <div className=" bg-black/10 flex w-full h-[32rem] mt-2 rounded-xl no-scrollbar1 overflow-y-auto">
             <div className="m-4 flex flex-col w-full gap-y-4 ">
-              <div className="flex bg-white rounded-xl justify-center text-prim py-4">
-                <span>Deadlift</span>
+              <div
+                onClick={() => setTrainingId("1")}
+                className="flex bg-white rounded-xl justify-center text-prim py-4"
+              >
+                <span
+                  className={`${
+                    trainingId === "1" ? "underline-offset-8 underline" : null
+                  } cursor-pointer`}
+                >
+                  Deadlift
+                </span>
+              </div>
+              <div
+                onClick={() => setTrainingId("2")}
+                className="flex bg-white rounded-xl justify-center text-prim py-4"
+              >
+                <span
+                  className={`${
+                    trainingId === "2" ? "underline-offset-8 underline" : null
+                  } cursor-pointer`}
+                >
+                  Bench Press
+                </span>
               </div>
             </div>
           </div>
@@ -49,7 +72,12 @@ const ProgressPage = () => {
       </div>
       <div className="w-full md:w-2/3 h-full flex flex-col bg-white">
         <div className="flex m-4 h-full">
-          <div className="bg-slate-200 rounded-xl w-full p-4 overflow-y-scroll no-scrollbar h-[720px]"></div>
+          <div className="bg-slate-200 rounded-xl grid grid-cols-2 gap-2 w-full p-4 overflow-y-scroll no-scrollbar h-[720px]">
+            <Graph />
+            <Graph />
+            <Graph />
+            <Graph />
+          </div>
         </div>
       </div>
     </div>
