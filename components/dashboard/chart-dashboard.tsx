@@ -23,7 +23,7 @@ const chartConfig = {
 
 export const DashboardChart = () => {
   return (
-    <div className="w-1/3 shadow bg-white items-center  rounded-3xl flex flex-col justify-evenly">
+    <div className="w-full md:w-1/3 shadow bg-white items-center  rounded-3xl flex flex-col justify-evenly">
       <span className="font-semibold tracking-widest text-muted-foreground">
         TRAINING INTENSITY
       </span>

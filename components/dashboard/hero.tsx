@@ -6,7 +6,7 @@ export const Hero = async () => {
   const user = await currentUser();
   const todayDate = TodayDate();
   return (
-    <div className="w-2/3 prim   border-4 border-[#9989e2] shadow rounded-3xl relative ">
+    <div className="w-full md:w-2/3 prim   border-4 border-[#9989e2] shadow rounded-3xl relative ">
       <div className="ml-10 mt-10 flex flex-col gap-y-5 ">
         <span className="font-light text-white tracking-wide text-5xl">
           Welcome

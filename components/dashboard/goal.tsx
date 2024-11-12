@@ -2,7 +2,7 @@ import CircularProgress from "../circ-progress";
 
 export const Goal = () => {
   return (
-    <div className="flex bg-white h-full p-11 flex-col w-1/3 shadow rounded-3xl items-center justify-between">
+    <div className="flex bg-white h-full p-11 flex-col w-full md:w-1/3 shadow rounded-3xl items-center justify-between">
       <span className="font-semibold tracking-widest text-muted-foreground">
         MAIN EXERCISE GOAL
       </span>

@@ -4,7 +4,7 @@ export const Streak = () => {
   const streak = [true, false, true, false, false, true, false];
   const dayT = ["M", "T", "W", "T", "F", "S", "S"];
   return (
-    <div className="flex flex-col h-1/2  shadow rounded-3xl justify-around bg-white">
+    <div className="flex flex-col h-1/2  py-6 shadow rounded-3xl justify-around bg-white">
       <div className="flex flex-row h-1/2 mx-6 items-end justify-center">
         <Flame fill="red" className="text-orange-500 size-16" />
         <div className="flex flex-col">
@@ -19,7 +19,7 @@ export const Streak = () => {
               key={i}
               className="flex flex-col items-center h-full justify-around"
             >
-              <Check className="prim rounded-full p-1 text-white animate-bounce" />
+              <Check className="prim rounded-full  p-1 text-white animate-bounce" />
               <span className="text-muted-foreground/35 font-medium">
                 {dayT[i]}
               </span>
