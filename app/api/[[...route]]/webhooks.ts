@@ -1,10 +1,11 @@
-// authors.ts
 import { Hono } from "hono";
+import { users } from "@/src/schema";
+import { db } from "@/src/drizzle";
 
 const app = new Hono();
 
-app.get("/", (c) => c.json("list authors"));
-app.post("/", (c) => c.json("create an author", 201));
-app.get("/:id", (c) => c.json(`get ${c.req.param("id")}`));
+const clerkWebhookSecret = process.env.CLERK_WEBHOOK_SECRET;
 
-export default app;
+if (!clerkWebhookSecret) {
+  throw new Error("CLERK_WEBHOOK_SECRET is not defined in .env file");
+}
