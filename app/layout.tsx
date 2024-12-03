@@ -5,6 +5,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 
 import { Poppins } from "next/font/google";
 import { ModalProvider } from "@/components/providers/modal-provider";
+import { QueryProvider } from "@/providers/query-provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,8 +30,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={`${poppins.variable} antialiased class`}>
-          <ModalProvider />
-          {children}
+          <QueryProvider>
+            <ModalProvider />
+            {children}
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>
