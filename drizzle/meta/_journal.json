@@ -15,6 +15,27 @@
       "when": 1733181732882,
       "tag": "0001_messy_killer_shrike",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1733610586199,
+      "tag": "0002_curvy_scorpion",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1733610754807,
+      "tag": "0003_far_argent",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1733610824897,
+      "tag": "0004_nebulous_chimera",
+      "breakpoints": true
     }
   ]
 }
