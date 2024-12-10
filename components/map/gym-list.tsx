@@ -1,5 +1,5 @@
 "use client";
-import { useGetMarkers } from "@/features/accounts/api/use-get-markers";
+import { useGetMarkers } from "@/features/accounts/api/markers/use-get-markers";
 import { ScrollArea } from "../ui/scroll-area";
 import { GymItem } from "./gym-item";
 import { Loader2 } from "lucide-react";

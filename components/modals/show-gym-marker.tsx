@@ -11,11 +11,21 @@ import {
 
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
-import { Star } from "lucide-react";
+import { Loader2, Star } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { useDeleteMarker } from "@/features/accounts/api/markers/use-delete-marker";
 
 export const ShowMarkerModal = () => {
   const { isOpen, onClose, type, data } = useModal();
+  const mutation = useDeleteMarker();
+  const handleDelete = () => {
+    if (!data.id) return;
+    mutation.mutate(data.id, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
+  };
   const clerkId = data.clerkId;
   const { user } = useUser();
 
@@ -49,7 +59,18 @@ export const ShowMarkerModal = () => {
         </DialogDescription>
         <DialogFooter className="px-6 py-4">
           {clerkId === user?.id && (
-            <Button variant="destructive">Remove Marker</Button>
+            <Button
+              className="w-44"
+              disabled={mutation.isPending}
+              onClick={handleDelete}
+              variant="destructive"
+            >
+              {mutation.isPending ? (
+                <Loader2 className="animate-spin" />
+              ) : (
+                "Remove Marker"
+              )}
+            </Button>
           )}
         </DialogFooter>
       </DialogContent>

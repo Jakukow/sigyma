@@ -4,7 +4,7 @@ import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import { GymList } from "@/components/map/gym-list";
 import { useModal } from "@/hooks/use-modal-store";
-import { useGetMarkers } from "@/features/accounts/api/use-get-markers";
+import { useGetMarkers } from "@/features/accounts/api/markers/use-get-markers";
 
 const MapPage = () => {
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -26,13 +26,13 @@ const MapPage = () => {
     // Dodanie markerów do mapy
     if (gymMarkers.data) {
       gymMarkers.data.map(
-        ({ gymName: name, gymAdress: description, lat, lng, clerkId }) => {
+        ({ gymName: name, gymAdress: description, lat, lng, clerkId, id }) => {
           const marker = new maplibregl.Marker()
             .setLngLat([+lng, +lat])
             .addTo(map);
 
           marker.getElement().addEventListener("click", () => {
-            onOpen("showMarker", { name, description, clerkId });
+            onOpen("showMarker", { name, description, clerkId, id });
           });
         }
       );

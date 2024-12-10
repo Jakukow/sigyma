@@ -22,7 +22,7 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
-import { useCreateMarker } from "@/features/accounts/api/use-create-marker";
+import { useCreateMarker } from "@/features/accounts/api/markers/use-create-marker";
 import { LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
@@ -62,8 +62,7 @@ export const CreateMarkerModal = () => {
       },
       {
         onSuccess: () => {
-          form.reset();
-          onClose();
+          handleClose();
         },
       }
     );
