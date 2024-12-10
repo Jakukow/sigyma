@@ -12,9 +12,12 @@ import {
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 import { Star } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
 
 export const ShowMarkerModal = () => {
   const { isOpen, onClose, type, data } = useModal();
+  const clerkId = data.clerkId;
+  const { user } = useUser();
 
   const isModalOpen = isOpen && type === "showMarker";
 
@@ -44,8 +47,10 @@ export const ShowMarkerModal = () => {
             </div>
           </div>
         </DialogDescription>
-        <DialogFooter className="bg-gray-100 px-6 py-4">
-          <Button variant="destructive">Remove Marker</Button>
+        <DialogFooter className="px-6 py-4">
+          {clerkId === user?.id && (
+            <Button variant="destructive">Remove Marker</Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

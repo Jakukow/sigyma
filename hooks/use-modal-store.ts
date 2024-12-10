@@ -13,7 +13,7 @@ interface ModalData {
   name?: string;
   address?: string;
   description?: string;
-
+  clerkId?: string;
   lngLat?: LngLat;
 }
 

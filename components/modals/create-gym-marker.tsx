@@ -62,7 +62,7 @@ export const CreateMarkerModal = () => {
       },
       {
         onSuccess: () => {
-          console.log("dasdas");
+          form.reset();
           onClose();
         },
       }

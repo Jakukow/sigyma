@@ -13,7 +13,7 @@ export const markers = pgTable("markers", {
   gymName: text("gym_name").notNull(),
   gymAdress: text("gym_adress").notNull(),
   lat: text("lat").notNull(),
-  lng: text("lat").notNull(),
+  lng: text("lng").notNull(),
 });
 
 export const insertAccountSchema = createInsertSchema(users);
