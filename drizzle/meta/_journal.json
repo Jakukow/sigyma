@@ -36,6 +36,13 @@
       "when": 1733610824897,
       "tag": "0004_nebulous_chimera",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1733826465298,
+      "tag": "0005_awesome_crusher_hogan",
+      "breakpoints": true
     }
   ]
 }

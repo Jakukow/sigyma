@@ -22,6 +22,8 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
+import { useCreateMarker } from "@/features/accounts/api/use-create-marker";
+import { LoaderCircle } from "lucide-react";
 
 const formSchema = z.object({
   name: z.string().min(1, {
@@ -32,8 +34,11 @@ const formSchema = z.object({
   }),
 });
 export const CreateMarkerModal = () => {
+  const mutation = useCreateMarker();
   const { isOpen, onClose, type, data } = useModal();
   const { lngLat } = data;
+  const lng = lngLat?.lng;
+  const lat = lngLat?.lat;
   const isModalOpen = isOpen && type === "createMarker";
 
   const form = useForm({
@@ -46,7 +51,22 @@ export const CreateMarkerModal = () => {
 
   const isLoading = form.formState.isSubmitting;
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log({ ...values, lngLat });
+    if (!lat || !lng) return;
+
+    mutation.mutate(
+      {
+        gymName: values.name,
+        gymAdress: values.description,
+        lat: lat.toString(),
+        lng: lng.toString(),
+      },
+      {
+        onSuccess: () => {
+          console.log("dasdas");
+          onClose();
+        },
+      }
+    );
   };
 
   const handleClose = () => {
@@ -108,8 +128,12 @@ export const CreateMarkerModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading}>
-                Create
+              <Button className="w-24" variant="primary" disabled={isLoading}>
+                {mutation.isPending ? (
+                  <LoaderCircle className="animate-spin" />
+                ) : (
+                  "Create"
+                )}
               </Button>
             </DialogFooter>
           </form>
