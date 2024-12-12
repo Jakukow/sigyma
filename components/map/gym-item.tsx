@@ -3,9 +3,19 @@ interface GymItemProps {
   lat: string;
   lng: string;
   gymName: string;
+  gymAdress: string;
+  gymCity: string;
+
   id: number;
 }
-export const GymItem = ({ mapRef, lat, lng, gymName }: GymItemProps) => {
+export const GymItem = ({
+  mapRef,
+  lat,
+  lng,
+  gymName,
+  gymCity,
+  gymAdress,
+}: GymItemProps) => {
   return (
     <div
       className="gap-x-5 justify-center items-center flex bg-white shadow py-4 rounded-xl hover:cursor-pointer"
@@ -22,10 +32,10 @@ export const GymItem = ({ mapRef, lat, lng, gymName }: GymItemProps) => {
       </span>
       <div className="flex flex-col mr-2">
         <span className=" text-center text-muted-foreground font-light">
-          Warsaw
+          {gymCity}
         </span>
         <span className=" text-xs text-center text-muted-foreground font-light">
-          Wolska 12
+          {gymAdress}
         </span>
       </div>
     </div>

@@ -9,36 +9,30 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Search } from "lucide-react";
+import { useGetMarkers } from "@/features/accounts/api/markers/use-get-markers";
+import { Loader2, Search } from "lucide-react";
+
 import { useState } from "react";
 
 const ReviewsPage = () => {
   const [open, setOpen] = useState(false);
-  const reviews = [
-    {
-      title: "SmartGym",
-      content: "Chorzowska 212",
-      author: "Katowice",
-      overallscore: "3.4",
-    },
-    {
-      title: "Altis",
-      content: "Styczyńskiego 18",
-      author: "Tarnowskie Góry",
-      overallscore: "5.0",
-    },
-  ];
+  const markers = useGetMarkers();
 
   return (
     <>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandInput placeholder="Search your gym..." />
+        <CommandInput
+          disabled={markers.isLoading}
+          placeholder="Search your gym..."
+        />
         <CommandList>
           <CommandEmpty>No results found</CommandEmpty>
           <CommandGroup heading="Results">
-            {reviews.map((reviews) => {
+            {markers.data?.map((reviews) => {
               return (
-                <CommandItem key={reviews.title}>{reviews.title}</CommandItem>
+                <CommandItem key={reviews.gymName}>
+                  {reviews.gymName}
+                </CommandItem>
               );
             })}
           </CommandGroup>
@@ -61,19 +55,26 @@ const ReviewsPage = () => {
         </div>
 
         <div className="bg-white w-full flex h-full">
-          <ScrollArea className="m-4 h-[600px] w-full">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {reviews.map((review, index) => (
-                <GymItemReview
-                  key={index}
-                  author={review.author}
-                  content={review.content}
-                  title={review.title}
-                  overallscore={review.overallscore}
-                />
-              ))}
-            </div>
-          </ScrollArea>
+          {markers.isLoading ? (
+            <Loader2 className="animate-spin text-prim self-center mx-auto" />
+          ) : !!markers.data ? (
+            <ScrollArea className="m-4 h-[600px] w-full">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {markers.data.map((review) => (
+                  <GymItemReview
+                    key={review.id}
+                    id={review.id}
+                    gymName={review.gymName}
+                    gymAdress={review.gymAdress}
+                    gymCity={review.gymCity}
+                    scores={review.scores}
+                  />
+                ))}
+              </div>
+            </ScrollArea>
+          ) : (
+            "No content"
+          )}
         </div>
       </div>
     </>

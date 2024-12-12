@@ -2,7 +2,7 @@ import { db } from "@/src/drizzle";
 import { insertMarkerSchema, markers } from "@/src/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { Hono } from "hono";
 
@@ -17,6 +17,7 @@ const app = new Hono()
         gymName: true,
         lat: true,
         lng: true,
+        gymCity: true,
       })
     ),
     async (c) => {
@@ -45,8 +46,8 @@ const app = new Hono()
     const markerList = await db.select().from(markers);
     return c.json({ markerList });
   })
-  .delete(
-    "/",
+  .post(
+    "/delete-marker",
     clerkMiddleware(),
     zValidator(
       "json",
@@ -66,22 +67,9 @@ const app = new Hono()
         return c.json({ error: "Invalid marker ID" }, 400);
       }
 
-      const [existingMarker] = await db
-        .select()
-        .from(markers)
-        .where(eq(markers.id, marker.id));
-
-      if (!existingMarker) {
-        return c.json({ error: "Marker not found" }, 404);
-      }
-
-      if (existingMarker.clerkId !== auth.userId) {
-        return c.json({ error: "You are not the owner of this marker" }, 403);
-      }
-
       const deletedMarker = await db
         .delete(markers)
-        .where(eq(markers.id, marker.id))
+        .where(and(eq(markers.clerkId, auth.userId), eq(markers.id, marker.id)))
         .returning();
 
       return c.json({

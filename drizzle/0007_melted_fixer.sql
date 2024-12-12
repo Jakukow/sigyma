@@ -1,0 +1,1 @@
+ALTER TABLE "markers" ADD COLUMN "gym_city" text NOT NULL;

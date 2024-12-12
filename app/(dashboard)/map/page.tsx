@@ -23,7 +23,6 @@ const MapPage = () => {
 
     mapRef.current = map;
 
-    // Dodanie markerów do mapy
     if (gymMarkers.data) {
       gymMarkers.data.map(
         ({ gymName: name, gymAdress: description, lat, lng, clerkId, id }) => {
@@ -38,17 +37,15 @@ const MapPage = () => {
       );
     }
 
-    // Obsługa podwójnego kliknięcia (dodanie nowego markera)
     map.on("dblclick", (e) => {
       const lngLat = e.lngLat;
       onOpen("createMarker", { lngLat });
     });
 
-    // Czyszczenie instancji mapy podczas demontażu komponentu
     return () => {
       map.remove();
     };
-  }, [gymMarkers.data, onOpen]); // Dodaj zależność `gymMarkers.data` do `useEffect`
+  }, [gymMarkers.data, onOpen]);
 
   return (
     <div className="mt-11 mx-5 items-center justify-center flex  w-full h-full shadow bg-white rounded-xl overflow-hidden relative">

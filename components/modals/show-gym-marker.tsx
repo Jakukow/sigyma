@@ -19,12 +19,16 @@ export const ShowMarkerModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const mutation = useDeleteMarker();
   const handleDelete = () => {
+    console.log(data.id);
     if (!data.id) return;
-    mutation.mutate(data.id, {
-      onSuccess: () => {
-        onClose();
-      },
-    });
+    mutation.mutate(
+      { id: data.id },
+      {
+        onSuccess: () => {
+          onClose();
+        },
+      }
+    );
   };
   const clerkId = data.clerkId;
   const { user } = useUser();
@@ -46,7 +50,8 @@ export const ShowMarkerModal = () => {
         <DialogDescription>
           <div className="flex flex-col gap-y-2">
             <span>
-              Gym is located {data.description} street and has overall socre of{" "}
+              Gym is located at {data.description} street and has overall socre
+              of{" "}
             </span>
             <div className="flex justify-center gap-x-2 items-center">
               <strong>4,5/5</strong>

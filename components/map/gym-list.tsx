@@ -46,6 +46,8 @@ export const GymList = ({ mapRef }: GymListProp) => {
                     lng={marker.lng}
                     gymName={marker.gymName}
                     id={marker.id}
+                    gymCity={marker.gymCity}
+                    gymAdress={marker.gymAdress}
                   />
                 );
               })}

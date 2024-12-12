@@ -23,3 +23,6 @@ export function TodayDate() {
 
   return `${day}.${month}, ${weekday}`;
 }
+export function avg(input: number[]) {
+  return input.reduce((sum, score) => sum + score, 0) / input.length;
+}

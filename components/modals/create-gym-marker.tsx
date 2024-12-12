@@ -32,6 +32,9 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: "Address is required.",
   }),
+  city: z.string().min(1, {
+    message: "City is required.",
+  }),
 });
 export const CreateMarkerModal = () => {
   const mutation = useCreateMarker();
@@ -46,6 +49,7 @@ export const CreateMarkerModal = () => {
     defaultValues: {
       name: "",
       description: "",
+      city: "",
     },
   });
 
@@ -57,6 +61,7 @@ export const CreateMarkerModal = () => {
       {
         gymName: values.name,
         gymAdress: values.description,
+        gymCity: values.city,
         lat: lat.toString(),
         lng: lng.toString(),
       },
@@ -118,6 +123,27 @@ export const CreateMarkerModal = () => {
                         disabled={isLoading}
                         className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
                         placeholder="Enter gym address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="city"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="uppercase text-xs font-medium text-prim ">
+                      City
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="text"
+                        disabled={isLoading}
+                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0"
+                        placeholder="Enter city"
                         {...field}
                       />
                     </FormControl>
