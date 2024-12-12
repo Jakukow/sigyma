@@ -6,11 +6,16 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Separator } from "@/components/ui/separator";
+import { useGetReviews } from "@/features/accounts/api/reviews/use-get-reviews";
 import { useModal } from "@/hooks/use-modal-store";
+import { Loader2 } from "lucide-react";
 import { useParams } from "next/navigation";
 
 const Review = () => {
   const params = useParams();
+
+  const reviews = useGetReviews(+params.id);
+
   const { onOpen } = useModal();
   return (
     <div className="mt-11 mx-5 items-center flex  w-full h-full shadow bg-white rounded-xl overflow-hidden">
@@ -45,15 +50,39 @@ const Review = () => {
       <div className="w-2/3 flex flex-col justify-center h-full">
         <div className="m-4 rounded-xl flex h-[650px] bg-slate-200">
           <div className=" m-4 flex w-full">
-            <ScrollArea className="w-full">
-              <div className="flex flex-col gap-y-2">
-                <SingleReview />
-                <SingleReview />
-                <SingleReview />
-                <SingleReview />
-                <SingleReview />
-              </div>
-            </ScrollArea>
+            {reviews.isLoading ? (
+              <Loader2 className="animate-spin text-prim mx-auto self-center" />
+            ) : (
+              <>
+                {" "}
+                <ScrollArea className="w-full">
+                  <div className="flex flex-col gap-y-2">
+                    {reviews.data?.length === 0 ? (
+                      <p className="text-prim mx-auto ">
+                        No reviews has been posted yet
+                      </p>
+                    ) : (
+                      reviews.data?.map((review) => {
+                        return (
+                          <SingleReview
+                            key={review.id}
+                            title={review.title}
+                            comfort={review.comfort}
+                            cleanliness={review.cleanliness}
+                            equipment={review.equipment}
+                            atmosphere={review.atmosphere}
+                            body={review.body}
+                            createdAt={review.createdAt}
+                            overall={review.overall}
+                            username={review.clerkName}
+                          />
+                        );
+                      })
+                    )}
+                  </div>
+                </ScrollArea>
+              </>
+            )}
           </div>
         </div>
       </div>

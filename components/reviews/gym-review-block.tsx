@@ -43,7 +43,9 @@ export const GymItemReview = ({
               color="text-prim"
             />
             <div className="flex gap-1 items-center">
-              <span className="font-bold text-prim">{avg(scores)}</span>
+              <span className="font-bold text-prim">
+                {avg(scores).toFixed(2)}
+              </span>
               <span className="text-sm text-muted-foreground">
                 out of {scores.length} scores
               </span>

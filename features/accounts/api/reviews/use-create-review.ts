@@ -12,8 +12,10 @@ export const useCreateReview = () => {
       const response = await client.api.reviews.$post({ json });
       return await response.json();
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
+      const { markerId } = variables;
       queryClient.invalidateQueries({ queryKey: ["reviews"] });
+      queryClient.invalidateQueries({ queryKey: ["markers", markerId] });
     },
     onError: () => {},
   });

@@ -21,7 +21,6 @@ const app = new Hono()
       })
     ),
     async (c) => {
-      console.log("dasda");
       const auth = getAuth(c);
       const marker = c.req.valid("json");
       if (!auth?.userId) {

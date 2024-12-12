@@ -30,7 +30,7 @@ export const reviews = pgTable("reviews", {
   markerId: integer("marker_id")
     .notNull()
     .references(() => markers.id, { onDelete: "cascade" }),
-  clerkId: text("user_id").notNull(),
+  clerkName: text("user_name").notNull(),
   title: text("review_title").notNull(),
   body: text("review_body").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
