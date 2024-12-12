@@ -67,7 +67,7 @@ const ReviewsPage = () => {
                     gymName={review.gymName}
                     gymAdress={review.gymAdress}
                     gymCity={review.gymCity}
-                    scores={review.scores}
+                    scores={review.scores ?? []}
                   />
                 ))}
               </div>

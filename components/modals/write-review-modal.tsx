@@ -24,6 +24,8 @@ import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 
 import { Textarea } from "../ui/textarea";
+import { useCreateReview } from "@/features/accounts/api/reviews/use-create-review";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -47,7 +49,8 @@ const formSchema = z.object({
 });
 
 export const WriteReviewModal = () => {
-  const { isOpen, onClose, type } = useModal();
+  const mutation = useCreateReview();
+  const { isOpen, onClose, type, data } = useModal();
   const isModalOpen = isOpen && type === "writeReview";
 
   const form = useForm({
@@ -63,8 +66,32 @@ export const WriteReviewModal = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
-  const onSubmit = async (data) => {
-    console.log(data);
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!data.id) return;
+    const overallscore =
+      (values.atmosphere +
+        values.cleanliness +
+        values.comfort +
+        values.equipment) /
+      4;
+
+    mutation.mutate(
+      {
+        atmosphere: +values.atmosphere,
+        body: values.description,
+        title: values.title,
+        cleanliness: +values.cleanliness,
+        comfort: +values.comfort,
+        equipment: +values.equipment,
+        markerId: +data.id,
+        overall: overallscore,
+      },
+      {
+        onSuccess: () => {
+          handleClose();
+        },
+      }
+    );
   };
 
   const handleClose = () => {
@@ -250,7 +277,11 @@ export const WriteReviewModal = () => {
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
               <Button variant="primary" disabled={isLoading}>
-                Create
+                {mutation.isPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Create"
+                )}
               </Button>
             </DialogFooter>
           </form>

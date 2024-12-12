@@ -7,8 +7,10 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 import { Separator } from "@/components/ui/separator";
 import { useModal } from "@/hooks/use-modal-store";
+import { useParams } from "next/navigation";
 
 const Review = () => {
+  const params = useParams();
   const { onOpen } = useModal();
   return (
     <div className="mt-11 mx-5 items-center flex  w-full h-full shadow bg-white rounded-xl overflow-hidden">
@@ -35,7 +37,7 @@ const Review = () => {
 
         <Button
           className=" bg-white    mt-2 text-prim hover:bg-slate-100 w-1/2"
-          onClick={() => onOpen("writeReview")}
+          onClick={() => onOpen("writeReview", params)}
         >
           Write Review
         </Button>

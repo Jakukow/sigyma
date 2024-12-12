@@ -19,7 +19,6 @@ export const ShowMarkerModal = () => {
   const { isOpen, onClose, type, data } = useModal();
   const mutation = useDeleteMarker();
   const handleDelete = () => {
-    console.log(data.id);
     if (!data.id) return;
     mutation.mutate(
       { id: data.id },
