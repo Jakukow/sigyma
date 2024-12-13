@@ -11,13 +11,14 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useGetMarkers } from "@/features/accounts/api/markers/use-get-markers";
 import { Loader2, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { useState } from "react";
 
 const ReviewsPage = () => {
   const [open, setOpen] = useState(false);
   const markers = useGetMarkers();
-
+  const router = useRouter();
   return (
     <>
       <CommandDialog open={open} onOpenChange={setOpen}>
@@ -30,7 +31,13 @@ const ReviewsPage = () => {
           <CommandGroup heading="Results">
             {markers.data?.map((reviews) => {
               return (
-                <CommandItem key={reviews.gymName}>
+                <CommandItem
+                  className="cursor-pointer"
+                  key={reviews.id}
+                  onClickCapture={() => {
+                    router.push(`/reviews/${reviews.id}`);
+                  }}
+                >
                   {reviews.gymName}
                 </CommandItem>
               );

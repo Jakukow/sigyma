@@ -42,9 +42,25 @@ const app = new Hono()
     if (!auth?.userId) {
       return c.json({ error: "unauthorized" }, 401);
     }
-    const markerList = await db.select().from(markers);
+
+    const id = c.req.query("id");
+    if (id) {
+      const [marker] = await db
+        .select()
+        .from(markers)
+        .where(
+          and(eq(markers.clerkId, auth.userId), eq(markers.id, Number(id)))
+        );
+      return c.json({ marker });
+    }
+
+    const markerList = await db
+      .select()
+      .from(markers)
+      .where(eq(markers.clerkId, auth.userId));
     return c.json({ markerList });
   })
+
   .post(
     "/delete-marker",
     clerkMiddleware(),

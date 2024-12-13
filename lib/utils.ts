@@ -23,9 +23,13 @@ export function TodayDate() {
 
   return `${day}.${month}, ${weekday}`;
 }
-export function avg(input: number[]) {
+export function avg(input: number[] | null): number {
+  if (!input || input.length === 0) {
+    return 0;
+  }
   return input.reduce((sum, score) => sum + score, 0) / input.length;
 }
+
 export function formatRelativeDate(dateInput: Date | string): string {
   const inputDate = new Date(dateInput);
   const now = new Date();
