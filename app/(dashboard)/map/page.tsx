@@ -25,13 +25,21 @@ const MapPage = () => {
 
     if (gymMarkers.data) {
       gymMarkers.data.map(
-        ({ gymName: name, gymAdress: description, lat, lng, clerkId, id }) => {
+        ({
+          gymName: name,
+          gymAdress: description,
+          lat,
+          lng,
+          clerkId,
+          id,
+          scores,
+        }) => {
           const marker = new maplibregl.Marker()
             .setLngLat([+lng, +lat])
             .addTo(map);
 
           marker.getElement().addEventListener("click", () => {
-            onOpen("showMarker", { name, description, clerkId, id });
+            onOpen("showMarker", { name, description, clerkId, id, scores });
           });
         }
       );

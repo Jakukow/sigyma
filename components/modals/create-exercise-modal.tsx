@@ -29,11 +29,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useCreateExercise } from "@/features/accounts/api/exercises/use-create-exercises";
+import { Loader2 } from "lucide-react";
 
 enum ExerciseType {
   Kilograms = "Kilograms",
   Seconds = "Seconds",
 }
+
 const formSchema = z.object({
   name: z.string().min(1, {
     message: "Exercise name is required.",
@@ -45,21 +48,37 @@ const formSchema = z.object({
     errorMap: () => ({ message: "Invalid exercise type" }),
   }),
 });
+
 export const CreateExerciseModal = () => {
+  const mutation = useCreateExercise();
   const { isOpen, onClose, type } = useModal();
   const isModalOpen = isOpen && type === "createExercise";
 
-  const form = useForm({
+  const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
       description: "",
-      type: "",
+      type: undefined,
     },
   });
 
   const isLoading = form.formState.isSubmitting;
-  const onSubmit = async () => {};
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    mutation.mutate(
+      {
+        exDesc: values.description,
+        exName: values.name,
+        exUnit: values.type,
+      },
+      {
+        onSuccess: () => {
+          handleClose();
+        },
+      }
+    );
+  };
 
   const handleClose = () => {
     form.reset();
@@ -128,11 +147,13 @@ export const CreateExerciseModal = () => {
                     </FormLabel>
                     <Select
                       disabled={isLoading}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      onValueChange={(value) =>
+                        field.onChange(value as ExerciseType)
+                      }
+                      value={field.value}
                     >
                       <FormControl>
-                        <SelectTrigger className="bg-zinc-300/50 border-0 focucs:ring-0 text-black ring-offset-0 foucs:ring-offset-0 capitalize outline-none">
+                        <SelectTrigger className="bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 focus:ring-offset-0 capitalize outline-none">
                           <SelectValue placeholder="Select a unit type" />
                         </SelectTrigger>
                       </FormControl>
@@ -154,8 +175,17 @@ export const CreateExerciseModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading}>
-                Create
+              <Button
+                type="submit"
+                className="w-32"
+                variant="primary"
+                disabled={isLoading || mutation.isPending}
+              >
+                {mutation.isPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Create"
+                )}
               </Button>
             </DialogFooter>
           </form>

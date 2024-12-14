@@ -14,6 +14,7 @@ import { useModal } from "@/hooks/use-modal-store";
 import { Loader2, Star } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
 import { useDeleteMarker } from "@/features/accounts/api/markers/use-delete-marker";
+import { avg } from "@/lib/utils";
 
 export const ShowMarkerModal = () => {
   const { isOpen, onClose, type, data } = useModal();
@@ -53,10 +54,10 @@ export const ShowMarkerModal = () => {
               of{" "}
             </span>
             <div className="flex justify-center gap-x-2 items-center">
-              <strong>4,5/5</strong>
+              <strong>{avg(data.scores).toFixed(2)}/5</strong>
               <Star className="size-5 text-prim " />
               <span>
-                with <strong>132</strong> opinions
+                with <strong>{data.scores?.length}</strong> opinions
               </span>
             </div>
           </div>

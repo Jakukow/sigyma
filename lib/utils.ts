@@ -23,7 +23,7 @@ export function TodayDate() {
 
   return `${day}.${month}, ${weekday}`;
 }
-export function avg(input: number[] | null): number {
+export function avg(input: number[] | null | undefined): number {
   if (!input || input.length === 0) {
     return 0;
   }

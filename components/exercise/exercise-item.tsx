@@ -1,18 +1,19 @@
 import { cn } from "@/lib/utils";
+
 import { Edit, X } from "lucide-react";
 
 interface ExerciseItemProps {
   name: string;
   description: string;
   unit: string;
-  defaultEx: boolean;
+  clerkId: string;
 }
 
 export const ExerciseItem = ({
   name,
   description,
   unit,
-  defaultEx,
+  clerkId,
 }: ExerciseItemProps) => {
   return (
     <div className="justify-between mx-2 items-center py-4 hover:opacity-70 transition-all  gap-x-5 rounded-xl flex bg-white shadow">
@@ -35,7 +36,7 @@ export const ExerciseItem = ({
       <div
         className={cn(
           "flex items-center mr-4 gap-x-2",
-          defaultEx ? "visibility-hidden pointer-events-none" : ""
+          clerkId === "DEFAULT" ? "visibility-hidden pointer-events-none" : ""
         )}
       >
         <button>

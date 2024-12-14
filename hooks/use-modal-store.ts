@@ -16,6 +16,7 @@ interface ModalData {
   clerkId?: string;
   lngLat?: LngLat;
   id?: number;
+  scores?: number[];
 }
 
 interface ModalStore {

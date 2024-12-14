@@ -41,6 +41,15 @@ export const reviews = pgTable("reviews", {
   overall: real("overall_score").notNull(),
 });
 
+export const exercises = pgTable("exercises", {
+  id: serial("id").primaryKey(),
+  clerkId: text("user_id").notNull(),
+  exName: text("exercise_name").notNull(),
+  exDesc: text("exercise_description").notNull(),
+  exUnit: text("exercise_unit").notNull(),
+});
+
 export const insertAccountSchema = createInsertSchema(users);
 export const insertReviewsSchema = createInsertSchema(reviews);
 export const insertMarkerSchema = createInsertSchema(markers);
+export const insertExercisesSchema = createInsertSchema(exercises);

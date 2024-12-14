@@ -1,14 +1,14 @@
 import { client } from "@/lib/hono";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetMarkers = (id?: number) => {
-  const queryKey = id ? ["markers", id] : ["markers"];
+export const useGetExercises = (id?: number) => {
+  const queryKey = id ? ["exercises", id] : ["exercises"];
   const query = useQuery({
     queryKey,
     queryFn: async () => {
       const response = id
-        ? await client.api.markers.$get({ query: { id } })
-        : await client.api.markers.$get();
+        ? await client.api.exercises.$get({ query: { id } })
+        : await client.api.exercises.$get();
 
       if (!response.ok) {
         throw new Error("Failed to fetch markers");
@@ -16,10 +16,10 @@ export const useGetMarkers = (id?: number) => {
 
       const data = await response.json();
 
-      if ("marker" in data) {
-        return [data.marker];
-      } else if ("markerList" in data) {
-        return data.markerList;
+      if ("exercise" in data) {
+        return [data.exercise];
+      } else if ("exercisesList" in data) {
+        return data.exercisesList;
       } else {
         throw new Error("Unexpected response structure");
       }

@@ -71,6 +71,13 @@
       "when": 1734046574685,
       "tag": "0009_misty_blue_shield",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1734163701280,
+      "tag": "0010_flawless_scalphunter",
+      "breakpoints": true
     }
   ]
 }
