@@ -23,6 +23,7 @@ const ExercisePage = () => {
                 {exercises.data.map((ex) => {
                   return (
                     <ExerciseItem
+                      id={ex.id}
                       key={ex.exName}
                       name={ex.exName}
                       description={ex.exDesc}

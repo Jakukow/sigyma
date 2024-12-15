@@ -61,6 +61,41 @@ const app = new Hono()
 
       return c.json({ data });
     }
+  )
+  .post(
+    "/delete-exercise",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      insertExercisesSchema.pick({
+        id: true,
+        clerkId: true,
+      })
+    ),
+    async (c) => {
+      const exercise = c.req.valid("json");
+      const auth = getAuth(c);
+
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      if (!exercise.id) {
+        return c.json({ error: "Invalid exercise ID" }, 400);
+      }
+
+      const deletedExercise = await db
+        .delete(exercises)
+        .where(
+          and(eq(exercises.clerkId, auth.userId), eq(exercises.id, exercise.id))
+        )
+        .returning();
+
+      return c.json({
+        data: deletedExercise,
+        message: "Exercise deleted successfully",
+      });
+    }
   );
 
 export default app;
