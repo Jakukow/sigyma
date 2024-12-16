@@ -35,8 +35,7 @@ export const TrainingCard = ({ day, training }: TrainingCardProps) => {
           <div className="prim py-2 w-full justify-center flex text-white mt-2">
             <button
               onClick={() => {
-                onOpen("createTraining");
-                console.log("he");
+                onOpen("createTraining", { description: day });
               }}
               className="text-xl font-light hover:opacity-50 transition-all flex-shrink-0"
             >
