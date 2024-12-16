@@ -1,5 +1,6 @@
 "use client";
 import { useDeleteExercise } from "@/features/accounts/api/exercises/use-delete-exercise";
+import { useModal } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
 
 import { Edit, X } from "lucide-react";
@@ -20,11 +21,12 @@ export const ExerciseItem = ({
   clerkId,
   id,
 }: ExerciseItemProps) => {
-  const [isDeleting, setIsDeleting] = useState(false); // Kontroluje animację usuwania
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { onOpen } = useModal();
   const mutation = useDeleteExercise();
 
   const handleDelete = () => {
-    setIsDeleting(true); // Ustawiamy stan usuwania
+    setIsDeleting(true);
     setTimeout(() => {
       mutation.mutate(
         {
@@ -32,12 +34,15 @@ export const ExerciseItem = ({
           id,
         },
         {
-          onSuccess: () => {
-            // Element zostanie usunięty na serwerze, a React Query odświeży dane
-          },
+          onSuccess: () => {},
         }
       );
-    }, 500); // Dajemy czas na wykonanie animacji przed usunięciem
+    }, 500);
+  };
+
+  const handleEdit = () => {
+    console.log("Ddsa");
+    onOpen("editExercise", { unit, clerkId, id, description, name });
   };
 
   return (
@@ -69,7 +74,7 @@ export const ExerciseItem = ({
           clerkId === "DEFAULT" ? "visibility-hidden pointer-events-none" : ""
         )}
       >
-        <button>
+        <button onClick={handleEdit}>
           <Edit className="text-prim hover:-translate-y-1 transition-all" />
         </button>
         <button onClick={handleDelete}>

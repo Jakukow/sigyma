@@ -7,13 +7,15 @@ export type ModalType =
   | "createMarker"
   | "showMarker"
   | "writeReview"
-  | "createGoal";
+  | "createGoal"
+  | "editExercise";
 
 interface ModalData {
   name?: string;
   address?: string;
   description?: string;
   clerkId?: string;
+  unit?: string;
   lngLat?: LngLat;
   id?: number;
   scores?: number[];

@@ -96,6 +96,47 @@ const app = new Hono()
         message: "Exercise deleted successfully",
       });
     }
+  )
+  .post(
+    "/edit-exercise",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      insertExercisesSchema.pick({
+        exDesc: true,
+        exName: true,
+        exUnit: true,
+        id: true,
+      })
+    ),
+    async (c) => {
+      const exercise = c.req.valid("json");
+      const auth = getAuth(c);
+
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      if (!exercise.id) {
+        return c.json({ error: "Invalid exercise ID" }, 400);
+      }
+
+      const editedExercise = await db
+        .update(exercises)
+        .set({
+          exDesc: exercise.exDesc,
+          exName: exercise.exName,
+          exUnit: exercise.exUnit,
+        })
+        .where(
+          and(eq(exercises.id, exercise.id), eq(exercises.clerkId, auth.userId))
+        );
+
+      return c.json({
+        data: editedExercise,
+        message: "Exercise edited successfully",
+      });
+    }
   );
 
 export default app;

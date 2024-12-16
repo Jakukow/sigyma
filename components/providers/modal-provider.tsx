@@ -7,6 +7,7 @@ import { CreateMarkerModal } from "../modals/create-gym-marker";
 import { ShowMarkerModal } from "../modals/show-gym-marker";
 import { WriteReviewModal } from "../modals/write-review-modal";
 import { CreateGoalModal } from "../modals/create-goal-modal";
+import { EditExerciseModal } from "../modals/edit-exercise-modal";
 
 export function ModalProvider() {
   const [isMounted, setIsMounted] = useState(false);
@@ -27,6 +28,7 @@ export function ModalProvider() {
       <CreateMarkerModal />
       <WriteReviewModal />
       <CreateGoalModal />
+      <EditExerciseModal />
     </>
   );
 }
