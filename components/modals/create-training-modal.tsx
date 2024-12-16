@@ -27,6 +27,7 @@ import {
 } from "../ui/select";
 import { useGetExercises } from "@/features/accounts/api/exercises/use-get-exercises";
 import { Loader2 } from "lucide-react";
+import { useCreatePlan } from "@/features/accounts/api/plans/use-create-plans";
 
 type Exercise = {
   exercise: string;
@@ -78,8 +79,9 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export const CreateTrainingModal = () => {
+  const mutation = useCreatePlan();
   const { isOpen, onClose, type, data: day } = useModal();
-  const { description } = day;
+  const { description: dayweek } = day;
   const isModalOpen = isOpen && type === "createTraining";
   const exerciseList = useGetExercises();
   const form = useForm<FormValues>({
@@ -98,7 +100,35 @@ export const CreateTrainingModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
-    console.log({ ...data, description });
+    const formattedExercises = data.exercises.map((exercise, index) => {
+      const exerciseId = exerciseList.data?.find(
+        (e) => e.exName === exercise.exercise
+      )?.id;
+
+      if (!exerciseId) {
+        throw new Error(`Exercise ID not found for ${exercise.exercise}`);
+      }
+
+      return {
+        seriesNumber: exercise.seriesNumber,
+        exerciseId: exerciseId,
+        order: index + 1,
+      };
+    });
+    mutation.mutate(
+      {
+        exercises: formattedExercises,
+        plan: {
+          dayOfWeek: dayweek || "Monday",
+          planName: data.planName,
+        },
+      },
+      {
+        onSuccess: () => {
+          handleClose();
+        },
+      }
+    );
   };
 
   const handleClose = () => {
@@ -188,7 +218,7 @@ export const CreateTrainingModal = () => {
                                     </SelectTrigger>
                                   </FormControl>
                                   <SelectContent>
-                                    {exerciseList.data.map((type) => (
+                                    {exerciseList.data?.map((type) => (
                                       <SelectItem
                                         key={type.exName}
                                         value={type.exName}
@@ -257,8 +287,17 @@ export const CreateTrainingModal = () => {
                   Add Another Exercise
                 </Button>
 
-                <Button type="submit" variant="primary" disabled={isLoading}>
-                  Create
+                <Button
+                  type="submit"
+                  className="w-32"
+                  variant="primary"
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Create"
+                  )}
                 </Button>
               </div>
             </form>

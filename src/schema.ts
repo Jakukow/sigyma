@@ -49,7 +49,40 @@ export const exercises = pgTable("exercises", {
   exUnit: text("exercise_unit").notNull(),
 });
 
+export const planExercises = pgTable("plan_exercises", {
+  id: serial("id").primaryKey(),
+
+  exerciseId: integer("exercise_id")
+    .notNull()
+    .references(() => exercises.id, { onDelete: "restrict" }),
+  seriesNumber: integer("series_number").notNull(),
+  dayOfWeek: text("day_of_week").notNull(),
+});
+
+export const trainingPlans = pgTable("trainingplans", {
+  id: serial("id").primaryKey(),
+  clerkId: text("user_id").notNull(),
+  planName: text("plan_name").notNull(),
+  dayOfWeek: text("day_week").notNull(),
+});
+
+export const trainingPlanExercises = pgTable("trainingplan_exercises", {
+  id: serial("id").primaryKey(),
+  trainingPlanId: integer("training_plan_id")
+    .notNull()
+    .references(() => trainingPlans.id, { onDelete: "cascade" }),
+  exerciseId: integer("exercise_id")
+    .notNull()
+    .references(() => exercises.id, { onDelete: "cascade" }),
+  seriesNumber: integer("series_number").notNull(),
+  order: integer("order").notNull(),
+});
+
 export const insertAccountSchema = createInsertSchema(users);
+export const insertTrainingPlansSchema = createInsertSchema(trainingPlans);
+export const insertPlanExeciseSchema = createInsertSchema(
+  trainingPlanExercises
+);
 export const insertReviewsSchema = createInsertSchema(reviews);
 export const insertMarkerSchema = createInsertSchema(markers);
 export const insertExercisesSchema = createInsertSchema(exercises);
