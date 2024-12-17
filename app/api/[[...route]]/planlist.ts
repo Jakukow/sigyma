@@ -6,7 +6,7 @@ import {
 } from "@/src/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { Hono } from "hono";
 import { z } from "zod";
@@ -71,6 +71,43 @@ const app = new Hono()
       .from(trainingPlans)
       .where(eq(trainingPlans.clerkId, auth.userId));
     return c.json({ planList });
-  });
+  })
+  .post(
+    "/delete-plan",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      insertTrainingPlansSchema.pick({
+        id: true,
+      })
+    ),
+    async (c) => {
+      const trainingPlan = c.req.valid("json");
+      const auth = getAuth(c);
+
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      if (!trainingPlan.id) {
+        return c.json({ error: "Invalid marker ID" }, 400);
+      }
+
+      const deletedPlan = await db
+        .delete(trainingPlans)
+        .where(
+          and(
+            eq(trainingPlans.clerkId, auth.userId),
+            eq(trainingPlans.id, trainingPlan.id)
+          )
+        )
+        .returning();
+
+      return c.json({
+        data: deletedPlan,
+        message: "Training plan deleted successfully",
+      });
+    }
+  );
 
 export default app;
