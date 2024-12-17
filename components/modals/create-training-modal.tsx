@@ -27,7 +27,7 @@ import {
 } from "../ui/select";
 import { useGetExercises } from "@/features/accounts/api/exercises/use-get-exercises";
 import { Loader2 } from "lucide-react";
-import { useCreatePlan } from "@/features/accounts/api/plans/use-create-plans";
+import { useCreatePlan } from "@/features/accounts/api/planlist/use-create-plans";
 
 type Exercise = {
   exercise: string;

@@ -4,7 +4,11 @@ import { TrainingSingle } from "./training-single";
 
 interface TrainingCardProps {
   day: string;
-  training: string[];
+  training: {
+    id: number;
+    clerkId: string;
+    planName: string;
+  }[];
 }
 
 export const TrainingCard = ({ day, training }: TrainingCardProps) => {
@@ -22,7 +26,7 @@ export const TrainingCard = ({ day, training }: TrainingCardProps) => {
             <div className="m-4  w-full h-[45vh] no-scrollbar flex flex-col justify-start overflow-y-auto  items-center rounded-xl bg-slate-200 ">
               {training.some((training) => training) ? (
                 training.map((training, index) => (
-                  <TrainingSingle key={index} training={training} />
+                  <TrainingSingle key={index} training={training.planName} />
                 ))
               ) : (
                 <div className="w-full h-full gap-y-5 bg-white flex-col justify-center font-bold text-3xl tracking-widest text-prim items-center  flex">

@@ -5,20 +5,29 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+type TrainingDay = {
+  day: string;
+  trainings: {
+    id: number;
+    clerkId: string;
+    planName: string;
+  }[];
+};
+const daysOfWeek = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
 export function TodayDate() {
   const today = new Date();
 
   const day = String(today.getDate()).padStart(2, "0"); // Dzień
   const month = String(today.getMonth() + 1).padStart(2, "0"); // Miesiące są indeksowane od 0, więc dodajemy 1
-  const daysOfWeek = [
-    "Sunday",
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-  ];
+
   const weekday = daysOfWeek[today.getDay()]; // Pobiera dzień tygodnia (0 - niedziela, 6 - sobota)
 
   return `${day}.${month}, ${weekday}`;
@@ -65,3 +74,29 @@ export function formatRelativeDate(dateInput: Date | string): string {
     return `${years} year${years > 1 ? "s" : ""} ago`;
   }
 }
+export const transformPlanListToTrainingDays = (
+  planList: {
+    id: number;
+    clerkId: string;
+    planName: string;
+    dayOfWeek: string;
+  }[]
+): TrainingDay[] => {
+  const trainingDays: TrainingDay[] = daysOfWeek.map((day) => ({
+    day,
+    trainings: [],
+  }));
+
+  planList.forEach((plan) => {
+    const index = daysOfWeek.indexOf(plan.dayOfWeek);
+    if (index !== -1) {
+      trainingDays[index].trainings.push({
+        id: plan.id,
+        clerkId: plan.clerkId,
+        planName: plan.planName,
+      });
+    }
+  });
+
+  return trainingDays;
+};
