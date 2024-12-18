@@ -5,7 +5,7 @@ import { useForm, useFieldArray, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { HiOutlineDotsVertical } from "react-icons/hi";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useMemo } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../ui/dialog";
 import {
   Form,
@@ -27,7 +27,8 @@ import {
 } from "../ui/select";
 import { useGetExercises } from "@/features/accounts/api/exercises/use-get-exercises";
 import { Loader2 } from "lucide-react";
-import { useCreatePlan } from "@/features/accounts/api/planlist/use-create-plans";
+import { useGetPlanExercises } from "@/features/accounts/api/planlist/use-get-plan-exercise";
+import { useEditPlan } from "@/features/accounts/api/planlist/use-edit-plans";
 
 type Exercise = {
   exercise: string;
@@ -79,22 +80,44 @@ function SortableItem({ id, children }: SortableItemProps) {
 }
 
 export const EditTrainingModal = () => {
-  const mutation = useCreatePlan();
-  const { isOpen, onClose, type, data: day } = useModal();
-  const { description: dayweek } = day;
+  const mutation = useEditPlan();
+
+  const { isOpen, onClose, type, data } = useModal();
+
   const isModalOpen = isOpen && type === "editTraining";
   const exerciseList = useGetExercises();
+  const planList = useGetPlanExercises(data.id || 0);
+  const id = data.id;
+  const exArr = useMemo(() => {
+    return (
+      planList.data?.map((x) => ({
+        exercise: x.exerciseName,
+        seriesNumber: x.seriesNumber,
+      })) || []
+    );
+  }, [planList.data]);
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      planName: "",
-      exercises: [{ exercise: "", seriesNumber: 1 }],
+      planName: data.description || "",
+      exercises: exArr.length ? exArr : [{ exercise: "", seriesNumber: 1 }],
     },
   });
+
+  useEffect(() => {
+    if (!planList.isLoading && planList.data) {
+      form.reset({
+        planName: data.description || "",
+        exercises: exArr.length ? exArr : [{ exercise: "", seriesNumber: 1 }],
+      });
+    }
+  }, [planList.data, planList.isLoading, data.description, form, exArr]);
 
   const { fields, append, remove, move } = useFieldArray({
     control: form.control,
     name: "exercises",
+    keyName: "id",
   });
 
   const isLoading = form.formState.isSubmitting;
@@ -120,8 +143,9 @@ export const EditTrainingModal = () => {
       {
         exercises: formattedExercises,
         plan: {
-          dayOfWeek: dayweek || "Monday",
+          dayOfWeek: "Monday",
           planName: data.planName,
+          id,
         },
       },
       {
@@ -151,10 +175,10 @@ export const EditTrainingModal = () => {
       <DialogContent className="bg-white text-prim p-0 max-h-[80vh] h-full flex flex-col ">
         <DialogHeader className="pt-8 px-6 flex-shrink-0">
           <DialogTitle className="text-2xl text-center font-bold tracking-wide">
-            ADD NEW TRAINING PLAN FOR {day.description?.toUpperCase()}
+            EDIT {data.description?.toUpperCase()} TRAINING
           </DialogTitle>
         </DialogHeader>
-        {exerciseList.isLoading ? (
+        {exerciseList.isLoading || planList.isLoading ? (
           <Loader2 className="animate-spin mx-auto text-prim" />
         ) : (
           <Form {...form}>
@@ -297,7 +321,7 @@ export const EditTrainingModal = () => {
                   {mutation.isPending ? (
                     <Loader2 className="animate-spin" />
                   ) : (
-                    "Create"
+                    "Update"
                   )}
                 </Button>
               </div>

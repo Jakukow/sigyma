@@ -133,6 +133,62 @@ const app = new Hono()
         .orderBy(trainingPlanExercises.order);
       return c.json({ exerciseList });
     }
+  )
+  .post(
+    "/update-plan",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      z.object({
+        plan: insertTrainingPlansSchema.pick({
+          id: true,
+          dayOfWeek: true,
+          planName: true,
+        }),
+        exercises: z.array(
+          z.object({
+            exerciseId: z.number(),
+            seriesNumber: z.number().min(1),
+            order: z.number().min(1),
+            exerciseName: z.string(),
+          })
+        ),
+      })
+    ),
+    async (c) => {
+      const trainingPlan = c.req.valid("json");
+      const auth = getAuth(c);
+
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const trainingPlanId = trainingPlan.plan.id;
+      if (!trainingPlanId) {
+        return c.json({ error: "Invalid marker ID" }, 400);
+      }
+
+      await db
+        .delete(trainingPlanExercises)
+        .where(
+          and(
+            eq(trainingPlans.clerkId, auth.userId),
+            eq(trainingPlanExercises.trainingPlanId, trainingPlanId)
+          )
+        );
+
+      const exercises = trainingPlan.exercises.map((exercise) => ({
+        trainingPlanId,
+        exerciseId: exercise.exerciseId,
+        seriesNumber: exercise.seriesNumber,
+        order: exercise.order,
+        exerciseName: exercise.exerciseName,
+      }));
+
+      await db.insert(trainingPlanExercises).values(exercises);
+
+      return c.json({ exercises });
+    }
   );
 
 export default app;

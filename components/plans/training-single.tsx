@@ -32,7 +32,9 @@ export const TrainingSingle = ({ training, id }: TrainingSingleProps) => {
   const handleView = () => {
     onOpen("showPlanExercise", { id: id, description: training });
   };
-  const handleEdit = () => {};
+  const handleEdit = () => {
+    onOpen("editTraining", { id, description: training });
+  };
 
   return (
     <div

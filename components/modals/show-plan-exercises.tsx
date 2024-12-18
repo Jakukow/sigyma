@@ -12,12 +12,13 @@ import {
 import { Button } from "../ui/button";
 import { useModal } from "@/hooks/use-modal-store";
 
-import { useGetExercises } from "@/features/accounts/api/planlist/use-get-plan-exercise";
+import { useGetPlanExercises } from "@/features/accounts/api/planlist/use-get-plan-exercise";
+import { Loader2 } from "lucide-react";
 
 export const ShowPlanExercisesModal = () => {
   const { isOpen, onClose, type, data } = useModal();
 
-  const exercisesList = useGetExercises(data.id);
+  const exercisesList = useGetPlanExercises(data.id ?? 0);
 
   const isModalOpen = isOpen && type === "showPlanExercise";
 
@@ -33,16 +34,20 @@ export const ShowPlanExercisesModal = () => {
             {data.description?.toUpperCase()}
           </DialogTitle>
         </DialogHeader>
-        <DialogDescription>
-          <ul>
-            {exercisesList.data?.map((ex) => {
-              return (
-                <li key={ex.id} className="text-xl my-4 ">
-                  {ex.exerciseName} - {ex.seriesNumber} series
-                </li>
-              );
-            })}
-          </ul>
+        <DialogDescription className="mx-auto">
+          {exercisesList.isLoading ? (
+            <Loader2 className="animate-spin text-prim" />
+          ) : (
+            <ul>
+              {exercisesList.data?.map((ex) => {
+                return (
+                  <li key={ex.id} className="text-xl my-4 ">
+                    {ex.exerciseName} - {ex.seriesNumber} series
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </DialogDescription>
         <DialogFooter className="px-6 items-center">
           <Button className="w-44" onClick={handleClose} variant="primary">
