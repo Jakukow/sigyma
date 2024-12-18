@@ -49,16 +49,6 @@ export const exercises = pgTable("exercises", {
   exUnit: text("exercise_unit").notNull(),
 });
 
-export const planExercises = pgTable("plan_exercises", {
-  id: serial("id").primaryKey(),
-
-  exerciseId: integer("exercise_id")
-    .notNull()
-    .references(() => exercises.id, { onDelete: "restrict" }),
-  seriesNumber: integer("series_number").notNull(),
-  dayOfWeek: text("day_of_week").notNull(),
-});
-
 export const trainingPlans = pgTable("trainingplans", {
   id: serial("id").primaryKey(),
   clerkId: text("user_id").notNull(),
@@ -71,6 +61,7 @@ export const trainingPlanExercises = pgTable("trainingplan_exercises", {
   trainingPlanId: integer("training_plan_id")
     .notNull()
     .references(() => trainingPlans.id, { onDelete: "cascade" }),
+  exerciseName: text("ex-name").notNull(),
   exerciseId: integer("exercise_id")
     .notNull()
     .references(() => exercises.id, { onDelete: "cascade" }),

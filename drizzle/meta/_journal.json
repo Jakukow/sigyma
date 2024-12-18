@@ -85,6 +85,20 @@
       "when": 1734385901902,
       "tag": "0011_natural_magik",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1734549172866,
+      "tag": "0012_daily_havok",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1734549764469,
+      "tag": "0013_legal_strong_guy",
+      "breakpoints": true
     }
   ]
 }

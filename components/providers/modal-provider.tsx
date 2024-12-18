@@ -8,6 +8,8 @@ import { ShowMarkerModal } from "../modals/show-gym-marker";
 import { WriteReviewModal } from "../modals/write-review-modal";
 import { CreateGoalModal } from "../modals/create-goal-modal";
 import { EditExerciseModal } from "../modals/edit-exercise-modal";
+import { ShowPlanExercisesModal } from "../modals/show-plan-exercises";
+import { EditTrainingModal } from "../modals/edit-training-modal";
 
 export function ModalProvider() {
   const [isMounted, setIsMounted] = useState(false);
@@ -22,6 +24,8 @@ export function ModalProvider() {
 
   return (
     <>
+      <EditTrainingModal />
+      <ShowPlanExercisesModal />
       <CreateTrainingModal />
       <CreateExerciseModal />
       <ShowMarkerModal />

@@ -1,4 +1,5 @@
 import { useDeletePlan } from "@/features/accounts/api/planlist/use-delete-plan";
+import { useModal } from "@/hooks/use-modal-store";
 import { cn } from "@/lib/utils";
 import { Edit, Eye, X } from "lucide-react";
 import { useState } from "react";
@@ -11,7 +12,7 @@ interface TrainingSingleProps {
 
 export const TrainingSingle = ({ training, id }: TrainingSingleProps) => {
   const [isDeleting, setIsDeleting] = useState(false);
-
+  const { onOpen } = useModal();
   const deletePlans = useDeletePlan();
 
   const handleDelete = () => {
@@ -28,7 +29,9 @@ export const TrainingSingle = ({ training, id }: TrainingSingleProps) => {
     }, 500);
   };
 
-  const handleView = () => {};
+  const handleView = () => {
+    onOpen("showPlanExercise", { id: id, description: training });
+  };
   const handleEdit = () => {};
 
   return (
@@ -44,9 +47,12 @@ export const TrainingSingle = ({ training, id }: TrainingSingleProps) => {
         </span>
         <div className="flex items-center mr-2g gap-x-2">
           <button>
-            <Eye className="text-prim hover:-translate-y-1 transition-all" />
+            <Eye
+              className="text-prim hover:-translate-y-1 transition-all"
+              onClick={handleView}
+            />
           </button>
-          <button>
+          <button onClick={handleEdit}>
             <Edit className="text-prim hover:-translate-y-1 transition-all" />
           </button>
           <button onClick={handleDelete}>

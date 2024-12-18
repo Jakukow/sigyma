@@ -27,6 +27,7 @@ const app = new Hono()
             exerciseId: z.number(),
             seriesNumber: z.number().min(1),
             order: z.number().min(1),
+            exerciseName: z.string(),
           })
         ),
       })
@@ -53,6 +54,7 @@ const app = new Hono()
         exerciseId: exercise.exerciseId,
         seriesNumber: exercise.seriesNumber,
         order: exercise.order,
+        exerciseName: exercise.exerciseName,
       }));
 
       await db.insert(trainingPlanExercises).values(exercises);
@@ -107,6 +109,29 @@ const app = new Hono()
         data: deletedPlan,
         message: "Training plan deleted successfully",
       });
+    }
+  )
+  .get(
+    "/get-exercises",
+    clerkMiddleware(),
+
+    async (c) => {
+      const auth = getAuth(c);
+      if (!auth?.userId) {
+        return c.json({ error: "unauthorized" }, 401);
+      }
+      const id = c.req.query("id");
+
+      if (!id) {
+        return c.json({ error: "'id' is required" }, 400);
+      }
+
+      const exerciseList = await db
+        .select()
+        .from(trainingPlanExercises)
+        .where(eq(trainingPlanExercises.trainingPlanId, +id))
+        .orderBy(trainingPlanExercises.order);
+      return c.json({ exerciseList });
     }
   );
 

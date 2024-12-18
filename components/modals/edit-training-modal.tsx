@@ -78,11 +78,11 @@ function SortableItem({ id, children }: SortableItemProps) {
   );
 }
 
-export const CreateTrainingModal = () => {
+export const EditTrainingModal = () => {
   const mutation = useCreatePlan();
   const { isOpen, onClose, type, data: day } = useModal();
   const { description: dayweek } = day;
-  const isModalOpen = isOpen && type === "createTraining";
+  const isModalOpen = isOpen && type === "editTraining";
   const exerciseList = useGetExercises();
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
