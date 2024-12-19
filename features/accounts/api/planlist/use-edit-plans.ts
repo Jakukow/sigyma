@@ -19,8 +19,11 @@ export const useEditPlan = () => {
 
       return await response.json();
     },
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ["planlist"] });
+      queryClient.invalidateQueries({
+        queryKey: ["plan-exercises", variables.plan.id],
+      });
     },
     onError: () => {},
   });

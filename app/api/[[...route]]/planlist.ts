@@ -167,15 +167,13 @@ const app = new Hono()
       if (!trainingPlanId) {
         return c.json({ error: "Invalid marker ID" }, 400);
       }
-
+      await db
+        .update(trainingPlans)
+        .set({ planName: trainingPlan.plan.planName })
+        .where(eq(trainingPlans.id, trainingPlanId));
       await db
         .delete(trainingPlanExercises)
-        .where(
-          and(
-            eq(trainingPlans.clerkId, auth.userId),
-            eq(trainingPlanExercises.trainingPlanId, trainingPlanId)
-          )
-        );
+        .where(eq(trainingPlanExercises.trainingPlanId, trainingPlanId));
 
       const exercises = trainingPlan.exercises.map((exercise) => ({
         trainingPlanId,
@@ -187,7 +185,7 @@ const app = new Hono()
 
       await db.insert(trainingPlanExercises).values(exercises);
 
-      return c.json({ exercises });
+      return c.json({ trainingPlanId });
     }
   );
 
