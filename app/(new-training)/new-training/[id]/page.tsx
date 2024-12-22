@@ -36,13 +36,7 @@ const TrainingPage = () => {
   const exercsiseList = useGetPlanExercises(+params.id);
   const isLoading = exercsiseList.isLoading;
 
-  const trainingName = "Full Body Workout"; // Name of the training
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<TrainingFormSchema>({
+  const { control, handleSubmit } = useForm<TrainingFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
       exercises: exercsiseList.data?.map((exercise) => ({
@@ -87,7 +81,7 @@ const TrainingPage = () => {
                           key={setIndex}
                           className="flex items-center space-x-4 "
                         >
-                          <span className="font-medium text-gray-700  ">
+                          <span className="font-medium text-gray-700 w-20 ">
                             Series {setIndex + 1}:
                           </span>
                           <Controller
@@ -99,7 +93,7 @@ const TrainingPage = () => {
                                   min={0}
                                   {...field}
                                   type="number"
-                                  className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                  className="w-16  p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
                                 />
                                 <span className="text-gray-600">reps x</span>
                               </div>
@@ -138,10 +132,11 @@ const TrainingPage = () => {
                   Submit Workout
                 </button>
                 <button
-                  onClick={() => router.push("/")}
+                  type="button"
+                  onClick={() => router.push("/new-training")}
                   className="mt-6 py-3 px-6 text-prim font-semibold rounded-xl shadow-md"
                 >
-                  Cancel
+                  Back
                 </button>
               </div>
             </form>
