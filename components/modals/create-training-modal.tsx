@@ -32,6 +32,7 @@ import { useCreatePlan } from "@/features/accounts/api/planlist/use-create-plans
 type Exercise = {
   exercise: string;
   seriesNumber: number;
+  exUnit: string;
 };
 
 type FormValues = {
@@ -88,7 +89,7 @@ export const CreateTrainingModal = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       planName: "",
-      exercises: [{ exercise: "", seriesNumber: 1 }],
+      exercises: [{ exercise: "", seriesNumber: 1, exUnit: "" }],
     },
   });
 
@@ -101,21 +102,23 @@ export const CreateTrainingModal = () => {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const formattedExercises = data.exercises.map((exercise, index) => {
-      const exerciseId = exerciseList.data?.find(
+      const matchedExercise = exerciseList.data?.find(
         (e) => e.exName === exercise.exercise
-      )?.id;
+      );
 
-      if (!exerciseId) {
-        throw new Error(`Exercise ID not found for ${exercise.exercise}`);
+      if (!matchedExercise) {
+        throw new Error(`Exercise not found for ${exercise.exercise}`);
       }
 
       return {
         seriesNumber: exercise.seriesNumber,
-        exerciseId: exerciseId,
+        exerciseId: matchedExercise.id,
         order: index + 1,
         exerciseName: exercise.exercise,
+        exercisesUnit: matchedExercise.exUnit, // Use exUnit from exerciseList
       };
     });
+
     mutation.mutate(
       {
         exercises: formattedExercises,
@@ -282,7 +285,9 @@ export const CreateTrainingModal = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => append({ exercise: "", seriesNumber: 1 })}
+                  onClick={() =>
+                    append({ exercise: "", seriesNumber: 1, exUnit: "" })
+                  }
                   disabled={isLoading}
                 >
                   Add Another Exercise

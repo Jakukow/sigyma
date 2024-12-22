@@ -1,0 +1,1 @@
+ALTER TABLE "trainingplan_exercises" ADD COLUMN "unit" text NOT NULL;

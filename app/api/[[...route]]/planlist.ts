@@ -28,6 +28,7 @@ const app = new Hono()
             seriesNumber: z.number().min(1),
             order: z.number().min(1),
             exerciseName: z.string(),
+            exercisesUnit: z.string(),
           })
         ),
       })
@@ -55,6 +56,7 @@ const app = new Hono()
         seriesNumber: exercise.seriesNumber,
         order: exercise.order,
         exerciseName: exercise.exerciseName,
+        exercisesUnit: exercise.exercisesUnit,
       }));
 
       await db.insert(trainingPlanExercises).values(exercises);
@@ -151,6 +153,7 @@ const app = new Hono()
             seriesNumber: z.number().min(1),
             order: z.number().min(1),
             exerciseName: z.string(),
+            unit: z.string(),
           })
         ),
       })
@@ -181,6 +184,7 @@ const app = new Hono()
         seriesNumber: exercise.seriesNumber,
         order: exercise.order,
         exerciseName: exercise.exerciseName,
+        exercisesUnit: exercise.unit,
       }));
 
       await db.insert(trainingPlanExercises).values(exercises);

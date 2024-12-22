@@ -62,6 +62,7 @@ export const trainingPlanExercises = pgTable("trainingplan_exercises", {
     .notNull()
     .references(() => trainingPlans.id, { onDelete: "cascade" }),
   exerciseName: text("ex-name").notNull(),
+  exercisesUnit: text("unit").notNull(),
   exerciseId: integer("exercise_id")
     .notNull()
     .references(() => exercises.id, { onDelete: "cascade" }),

@@ -3,6 +3,9 @@ import React from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useParams, useRouter } from "next/navigation";
+import { Loader2 } from "lucide-react";
+import { useGetPlanExercises } from "@/features/accounts/api/planlist/use-get-plan-exercise";
 
 const schema = z.object({
   exercises: z.array(
@@ -27,32 +30,13 @@ const schema = z.object({
 type TrainingFormSchema = z.infer<typeof schema>;
 
 const TrainingPage = () => {
+  const router = useRouter();
+  const params = useParams();
+
+  const exercsiseList = useGetPlanExercises(+params.id);
+  const isLoading = exercsiseList.isLoading;
+
   const trainingName = "Full Body Workout"; // Name of the training
-  const exercisesData = [
-    {
-      name: "Bench Press",
-      previousSets: [
-        { reps: 10, weight: 50 },
-        { reps: 8, weight: 55 },
-        { reps: 6, weight: 60 },
-      ],
-    },
-    {
-      name: "Squats",
-      previousSets: [
-        { reps: 12, weight: 80 },
-        { reps: 10, weight: 85 },
-        { reps: 8, weight: 90 },
-      ],
-    },
-    {
-      name: "Deadlift",
-      previousSets: [
-        { reps: 8, weight: 100 },
-        { reps: 6, weight: 110 },
-      ],
-    },
-  ];
 
   const {
     control,
@@ -61,11 +45,11 @@ const TrainingPage = () => {
   } = useForm<TrainingFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      exercises: exercisesData.map((exercise) => ({
-        name: exercise.name,
-        sets: exercise.previousSets.map((set) => ({
-          reps: set.reps,
-          weight: set.weight,
+      exercises: exercsiseList.data?.map((exercise) => ({
+        name: exercise.exerciseName,
+        sets: [...Array(exercise.seriesNumber)].map(() => ({
+          reps: 0,
+          weight: 0,
         })),
       })),
     },
@@ -76,97 +60,94 @@ const TrainingPage = () => {
   };
 
   return (
-    <div className="h-full flex justify-center items-center">
-      <div className="w-full max-w-lg mx-5 p-8 shadow bg-white rounded-3xl">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">
-          {trainingName}
-        </h1>
-        <p className="text-gray-600 mb-6">
-          Complete the exercises as listed below.
-        </p>
+    <div className="flex justify-center items-center w-full h-full">
+      {isLoading ? (
+        <Loader2 className="animate-spin" />
+      ) : (
+        <div className="h-full flex justify-center w-[40rem] items-center">
+          <div className="w-full max-w-lg mx-5 p-8 shadow bg-white rounded-3xl">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              Complete the exercises
+            </h1>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="space-y-6 min-h-[250px] max-h-[520px] no-scrollbar overflow-y-auto">
-            {exercisesData.map((exercise, exIndex) => (
-              <div
-                key={exIndex}
-                className="bg-gray-100 rounded-xl p-4 shadow-sm mx-2"
-              >
-                <h2 className="text-xl font-semibold text-gray-700 mb-2">
-                  {exercise.name}
-                </h2>
-                <p className="text-sm text-gray-500 mb-3">Previous sets:</p>
-                <ul className="space-y-2">
-                  {exercise.previousSets.map((set, setIndex) => (
-                    <li key={setIndex} className="flex items-center space-x-4">
-                      <span className="font-medium text-gray-700">
-                        Series {setIndex + 1}:
-                      </span>
-                      <Controller
-                        control={control}
-                        name={`exercises.${exIndex}.sets.${setIndex}.reps`}
-                        render={({ field }) => (
-                          <div className="flex items-center space-x-2">
-                            <input
-                              min={0}
-                              {...field}
-                              type="number"
-                              placeholder={`${set.reps}`}
-                              className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            />
-                            <span className="text-gray-600">reps x</span>
-                            {errors.exercises?.[exIndex]?.sets?.[setIndex]
-                              ?.reps && (
-                              <p className="text-red-500 text-xs mt-1">
-                                {
-                                  errors.exercises[exIndex].sets[setIndex].reps
-                                    ?.message
-                                }
-                              </p>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="space-y-6 min-h-[250px] max-h-[520px] no-scrollbar overflow-y-auto">
+                {exercsiseList.data?.map((exercise, exIndex) => (
+                  <div
+                    key={exercise.id}
+                    className="bg-gray-100 rounded-xl p-4 shadow-sm mx-2"
+                  >
+                    <h2 className="text-xl font-semibold text-gray-700 mb-2">
+                      {exercise.exerciseName}
+                    </h2>
+
+                    <ul className="space-y-2">
+                      {[...Array(exercise.seriesNumber)].map((_, setIndex) => (
+                        <li
+                          key={setIndex}
+                          className="flex items-center space-x-4 "
+                        >
+                          <span className="font-medium text-gray-700  ">
+                            Series {setIndex + 1}:
+                          </span>
+                          <Controller
+                            control={control}
+                            name={`exercises.${exIndex}.sets.${setIndex}.reps`}
+                            render={({ field }) => (
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  min={0}
+                                  {...field}
+                                  type="number"
+                                  className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                />
+                                <span className="text-gray-600">reps x</span>
+                              </div>
                             )}
-                          </div>
-                        )}
-                      />
-                      <Controller
-                        control={control}
-                        name={`exercises.${exIndex}.sets.${setIndex}.weight`}
-                        render={({ field }) => (
-                          <div className="flex items-center space-x-2">
-                            <input
-                              {...field}
-                              min={0}
-                              type="number"
-                              placeholder={`${set.weight}`}
-                              className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                            />
-                            <span className="text-gray-600">kgs</span>
-                            {errors.exercises?.[exIndex]?.sets?.[setIndex]
-                              ?.weight && (
-                              <p className="text-red-500 text-sm mt-1">
-                                {
-                                  errors.exercises[exIndex].sets[setIndex]
-                                    .weight?.message
-                                }
-                              </p>
+                          />
+                          <Controller
+                            control={control}
+                            name={`exercises.${exIndex}.sets.${setIndex}.weight`}
+                            render={({ field }) => (
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  {...field}
+                                  min={0}
+                                  type="number"
+                                  className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                />
+
+                                <span className="text-gray-600">
+                                  {exercise.exercisesUnit}
+                                </span>
+                              </div>
                             )}
-                          </div>
-                        )}
-                      />
-                    </li>
-                  ))}
-                </ul>
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <button
-            type="submit"
-            className="mt-6 py-3 px-6 prim text-white font-semibold rounded-xl shadow-md"
-          >
-            Submit Workout
-          </button>
-        </form>
-      </div>
+              <div className="flex justify-between">
+                <button
+                  type="submit"
+                  className="mt-6 py-3 px-6 prim text-white font-semibold rounded-xl shadow-md"
+                >
+                  Submit Workout
+                </button>
+                <button
+                  onClick={() => router.push("/")}
+                  className="mt-6 py-3 px-6 text-prim font-semibold rounded-xl shadow-md"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

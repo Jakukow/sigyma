@@ -33,6 +33,7 @@ import { useEditPlan } from "@/features/accounts/api/planlist/use-edit-plans";
 type Exercise = {
   exercise: string;
   seriesNumber: number;
+  exUnit: string;
 };
 
 type FormValues = {
@@ -137,6 +138,7 @@ export const EditTrainingModal = () => {
         exerciseId: exerciseId,
         order: index + 1,
         exerciseName: exercise.exercise,
+        unit: exercise.exUnit,
       };
     });
     mutation.mutate(
@@ -306,7 +308,9 @@ export const EditTrainingModal = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => append({ exercise: "", seriesNumber: 1 })}
+                  onClick={() =>
+                    append({ exercise: "", seriesNumber: 1, exUnit: "" })
+                  }
                   disabled={isLoading}
                 >
                   Add Another Exercise
