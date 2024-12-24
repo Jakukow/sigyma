@@ -104,47 +104,55 @@ const TrainingPage = () => {
 
                     <ul className="space-y-2">
                       {[...Array(exercise.seriesNumber)].map((_, setIndex) => (
-                        <li
-                          key={setIndex}
-                          className="flex items-center space-x-4 "
-                        >
-                          <span className="font-medium text-gray-700 w-20 ">
-                            Series {setIndex + 1}:
-                          </span>
-                          <Controller
-                            control={control}
-                            name={`exercises.${exIndex}.sets.${setIndex}.reps`}
-                            render={({ field }) => (
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  min={0}
-                                  {...field}
-                                  type="number"
-                                  className="w-16  p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
-                                <span className="text-gray-600">reps x</span>
-                              </div>
-                            )}
-                          />
-                          <Controller
-                            control={control}
-                            name={`exercises.${exIndex}.sets.${setIndex}.weight`}
-                            render={({ field }) => (
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  {...field}
-                                  min={0}
-                                  type="number"
-                                  className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                />
+                        <>
+                          <li
+                            key={setIndex}
+                            className="flex items-center space-x-4 "
+                          >
+                            <span className="font-medium text-gray-700 w-20 ">
+                              Series {setIndex + 1}:
+                            </span>
+                            <Controller
+                              control={control}
+                              name={`exercises.${exIndex}.sets.${setIndex}.reps`}
+                              render={({ field }) => (
+                                <div className="flex items-center space-x-2">
+                                  <input
+                                    min={0}
+                                    {...field}
+                                    type="number"
+                                    className="w-16  p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                  />
+                                  <span className="text-gray-600">reps x</span>
+                                </div>
+                              )}
+                            />
 
-                                <span className="text-gray-600">
-                                  {exercise.exercisesUnit}
-                                </span>
-                              </div>
-                            )}
-                          />
-                        </li>
+                            <Controller
+                              control={control}
+                              name={`exercises.${exIndex}.sets.${setIndex}.weight`}
+                              render={({ field }) => (
+                                <div className="flex items-center space-x-2">
+                                  <input
+                                    {...field}
+                                    min={0}
+                                    type="number"
+                                    className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                  />
+
+                                  <span className="text-gray-600">
+                                    {exercise.exercisesUnit}
+                                  </span>
+                                </div>
+                              )}
+                            />
+                          </li>
+                          <li>
+                            <p className="text-xs text-right text-muted-foreground ">
+                              Previous: 3 reps x 1 Seconds
+                            </p>
+                          </li>
+                        </>
                       ))}
                     </ul>
                   </div>
