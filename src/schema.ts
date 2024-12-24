@@ -70,6 +70,29 @@ export const trainingPlanExercises = pgTable("trainingplan_exercises", {
   order: integer("order").notNull(),
 });
 
+export const workoutSession = pgTable("workout_session", {
+  id: serial("id").primaryKey(),
+  clerkId: text("user_id").notNull(),
+  workoutDate: timestamp("workout_date").defaultNow().notNull(),
+  trainingId: integer("training_id")
+    .notNull()
+    .references(() => trainingPlans.id, { onDelete: "cascade" }),
+});
+
+export const workoutResults = pgTable("workout_results", {
+  id: serial("id").primaryKey(),
+  exerciseId: integer("exercise_id")
+    .notNull()
+    .references(() => exercises.id, { onDelete: "cascade" }),
+  workoutSessionId: integer("workout_session_id")
+    .notNull()
+    .references(() => workoutSession.id, { onDelete: "cascade" }),
+  setNumber: integer("set_number").notNull(),
+  reps: integer("reps").notNull(),
+  weight: real("weight").notNull(),
+});
+
+export const insertWorkoutResultsSchema = createInsertSchema(workoutResults);
 export const insertAccountSchema = createInsertSchema(users);
 export const insertTrainingPlansSchema = createInsertSchema(trainingPlans);
 export const insertPlanExeciseSchema = createInsertSchema(

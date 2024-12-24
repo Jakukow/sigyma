@@ -1,1 +1,0 @@
-DROP TABLE "plan_exercises" CASCADE;

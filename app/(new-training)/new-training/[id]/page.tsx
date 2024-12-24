@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useParams, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useGetPlanExercises } from "@/features/accounts/api/planlist/use-get-plan-exercise";
+import { useCreateWorkout } from "@/features/accounts/api/workouts/use-create-workout";
 
 const schema = z.object({
   exercises: z.array(
@@ -32,6 +33,7 @@ type TrainingFormSchema = z.infer<typeof schema>;
 const TrainingPage = () => {
   const router = useRouter();
   const params = useParams();
+  const mutate = useCreateWorkout();
 
   const exercsiseList = useGetPlanExercises(+params.id);
   const isLoading = exercsiseList.isLoading;
@@ -50,7 +52,32 @@ const TrainingPage = () => {
   });
 
   const onSubmit: SubmitHandler<TrainingFormSchema> = (data) => {
-    console.log("Form Data:", data);
+    const payload = {
+      trainingId: +params.id,
+      results: data.exercises.flatMap((exercise, exerciseIndex) => {
+        const exerciseId = exercsiseList.data?.[exerciseIndex]?.exerciseId;
+
+        if (!exerciseId) {
+          console.error(
+            `Exercise ID not found for exercise at index ${exerciseIndex}`
+          );
+          return [];
+        }
+
+        return exercise.sets.map((set, setIndex) => ({
+          exerciseId,
+          setNumber: setIndex + 1,
+          reps: set.reps,
+          weight: set.weight,
+        }));
+      }),
+    };
+
+    mutate.mutate(payload, {
+      onSuccess: () => {
+        router.push("/");
+      },
+    });
   };
 
   return (
@@ -127,9 +154,13 @@ const TrainingPage = () => {
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="mt-6 py-3 px-6 prim text-white font-semibold rounded-xl shadow-md"
+                  className="mt-6 py-3  px-6 w-52 prim text-white font-semibold rounded-xl shadow-md"
                 >
-                  Submit Workout
+                  {mutate.isPending ? (
+                    <Loader2 className="mx-auto animate-spin" />
+                  ) : (
+                    "Sumbit Workout"
+                  )}
                 </button>
                 <button
                   type="button"

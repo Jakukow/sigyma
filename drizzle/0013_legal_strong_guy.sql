@@ -1,1 +1,0 @@
-ALTER TABLE "trainingplan_exercises" ADD COLUMN "ex-name" text NOT NULL;
