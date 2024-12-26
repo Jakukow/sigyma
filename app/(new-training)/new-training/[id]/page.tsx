@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { useGetPlanExercises } from "@/features/accounts/api/planlist/use-get-plan-exercise";
 import { useCreateWorkout } from "@/features/accounts/api/workouts/use-create-workout";
+import { useGetLatestResult } from "@/features/accounts/api/workouts/use-get-latest-result";
 
 const schema = z.object({
   exercises: z.array(
@@ -34,11 +35,16 @@ const TrainingPage = () => {
   const router = useRouter();
   const params = useParams();
   const mutate = useCreateWorkout();
-
+  const sessionId = useGetLatestResult(+params.id);
   const exercsiseList = useGetPlanExercises(+params.id);
-  const isLoading = exercsiseList.isLoading;
 
-  const { control, handleSubmit } = useForm<TrainingFormSchema>({
+  const isLoading = exercsiseList.isLoading || sessionId.isLoading;
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TrainingFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
       exercises: exercsiseList.data?.map((exercise) => ({
@@ -103,57 +109,74 @@ const TrainingPage = () => {
                     </h2>
 
                     <ul className="space-y-2">
-                      {[...Array(exercise.seriesNumber)].map((_, setIndex) => (
-                        <>
-                          <li
-                            key={setIndex}
-                            className="flex items-center space-x-4 "
-                          >
-                            <span className="font-medium text-gray-700 w-20 ">
-                              Series {setIndex + 1}:
-                            </span>
-                            <Controller
-                              control={control}
-                              name={`exercises.${exIndex}.sets.${setIndex}.reps`}
-                              render={({ field }) => (
-                                <div className="flex items-center space-x-2">
-                                  <input
-                                    min={0}
-                                    {...field}
-                                    type="number"
-                                    className="w-16  p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                  />
-                                  <span className="text-gray-600">reps x</span>
-                                </div>
-                              )}
-                            />
+                      {[...Array(exercise.seriesNumber)].map((_, setIndex) => {
+                        const previousSet = sessionId.data?.find(
+                          (set) =>
+                            set.exerciseId === exercise.exerciseId &&
+                            set.setNumber === setIndex + 1
+                        );
 
-                            <Controller
-                              control={control}
-                              name={`exercises.${exIndex}.sets.${setIndex}.weight`}
-                              render={({ field }) => (
-                                <div className="flex items-center space-x-2">
-                                  <input
-                                    {...field}
-                                    min={0}
-                                    type="number"
-                                    className="w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-blue-400"
-                                  />
+                        return (
+                          <React.Fragment key={setIndex}>
+                            <li className="flex items-center space-x-4 ">
+                              <span className="font-medium text-gray-700 w-20">
+                                Series {setIndex + 1}:
+                              </span>
+                              <Controller
+                                control={control}
+                                name={`exercises.${exIndex}.sets.${setIndex}.reps`}
+                                render={({ field }) => (
+                                  <div className="flex items-center space-x-2">
+                                    <input
+                                      {...field}
+                                      type="number"
+                                      className={`w-16 p-2 border appearance-none rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
+          ${
+            errors.exercises?.[exIndex]?.sets?.[setIndex]?.reps
+              ? "border-red-500 focus:ring-red-400"
+              : "focus:ring-blue-400"
+          }`}
+                                    />
+                                    <span className="text-gray-600">
+                                      reps x
+                                    </span>
+                                  </div>
+                                )}
+                              />
 
-                                  <span className="text-gray-600">
-                                    {exercise.exercisesUnit}
-                                  </span>
-                                </div>
-                              )}
-                            />
-                          </li>
-                          <li>
-                            <p className="text-xs text-right text-muted-foreground ">
-                              Previous: 3 reps x 1 Seconds
-                            </p>
-                          </li>
-                        </>
-                      ))}
+                              <Controller
+                                control={control}
+                                name={`exercises.${exIndex}.sets.${setIndex}.weight`}
+                                render={({ field }) => (
+                                  <div className="flex items-center space-x-2">
+                                    <input
+                                      {...field}
+                                      type="number"
+                                      className={`w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
+          ${
+            errors.exercises?.[exIndex]?.sets?.[setIndex]?.weight
+              ? "border-red-500 focus:ring-red-400"
+              : "focus:ring-blue-400"
+          }`}
+                                    />
+                                    <span className="text-gray-600">
+                                      {exercise.exercisesUnit}
+                                    </span>
+                                  </div>
+                                )}
+                              />
+                            </li>
+                            {previousSet && (
+                              <li>
+                                <p className="text-xs text-right text-muted-foreground">
+                                  Previous: {previousSet.reps} reps x{" "}
+                                  {previousSet.weight} {exercise.exercisesUnit}
+                                </p>
+                              </li>
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
                     </ul>
                   </div>
                 ))}
@@ -163,6 +186,7 @@ const TrainingPage = () => {
                 <button
                   type="submit"
                   className="mt-6 py-3  px-6 w-52 prim text-white font-semibold rounded-xl shadow-md"
+                  disabled={mutate.isPending}
                 >
                   {mutate.isPending ? (
                     <Loader2 className="mx-auto animate-spin" />
