@@ -1,6 +1,6 @@
 "use client";
 
-import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -15,14 +15,11 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
-];
+import { Loader2 } from "lucide-react";
+interface ProgressTraining {
+  date: string; // Data treningu, np. "2024-01-01"
+  totalVolume: number; // Łączna objętość treningowa
+}
 
 const chartConfig = {
   desktop: {
@@ -31,39 +28,49 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export const Graph = () => {
+export const Graph = ({ chartData }: { chartData: ProgressTraining[] }) => {
+  if (!chartData || chartData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader2 className="animate-spin text-prim" />
+      </div>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Line Chart - Linear</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Progress Chart</CardTitle>
+        <CardDescription>Treningowy postęp objętościowy</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer className="w-96" config={chartConfig}>
           <LineChart
-            accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
-              right: 12,
+              top: 20,
+              right: 30,
+              left: 20,
+              bottom: 5,
             }}
           >
-            <CartesianGrid vertical={false} />
+            <CartesianGrid strokeDasharray="3 3" />
             <XAxis
-              dataKey="month"
+              dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value.slice(0, 10)}
             />
+            <YAxis />
             <ChartTooltip
-              cursor={false}
+              cursor={{ strokeDasharray: "3 3" }}
               content={<ChartTooltipContent hideLabel />}
             />
             <Line
-              dataKey="desktop"
-              type="linear"
-              stroke="var(--color-desktop)"
+              dataKey="totalVolume"
+              type="monotone"
+              stroke="#8884d8"
               strokeWidth={2}
               dot={false}
             />

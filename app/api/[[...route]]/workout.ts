@@ -94,6 +94,7 @@ const app = new Hono()
         .from(workoutSession)
         .where(eq(workoutSession.trainingId, +id))
         .orderBy(desc(workoutSession.workoutDate));
+
       const exerciseList = await db
         .select()
         .from(workoutResults)
