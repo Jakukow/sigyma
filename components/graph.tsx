@@ -38,13 +38,13 @@ export const Graph = ({ chartData }: { chartData: ProgressTraining[] }) => {
   }
 
   return (
-    <Card>
+    <Card className="w-full  h-full mx-4">
       <CardHeader>
         <CardTitle>Progress Chart</CardTitle>
-        <CardDescription>Treningowy postęp objętościowy</CardDescription>
+        <CardDescription>Trening Volume</CardDescription>
       </CardHeader>
       <CardContent>
-        <ChartContainer className="w-96" config={chartConfig}>
+        <ChartContainer className="w-full" config={chartConfig}>
           <LineChart
             data={chartData}
             margin={{
@@ -57,8 +57,8 @@ export const Graph = ({ chartData }: { chartData: ProgressTraining[] }) => {
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
               dataKey="date"
-              tickLine={false}
-              axisLine={false}
+              tickLine={true}
+              axisLine={true}
               tickMargin={8}
               tickFormatter={(value) => value.slice(0, 10)}
             />

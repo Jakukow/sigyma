@@ -1,8 +1,10 @@
 "use client";
 
 import { Graph } from "@/components/graph";
+import { GraphExercise } from "@/components/graph-exercise";
 import { useGetExercises } from "@/features/accounts/api/exercises/use-get-exercises";
 import { useGetPlans } from "@/features/accounts/api/planlist/use-get-plans";
+import { useGetProgressExercise } from "@/features/accounts/api/progress/use-get-progress-by-exercisie";
 import { useGetProgressTraining } from "@/features/accounts/api/progress/use-get-progress-by-training";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -16,6 +18,8 @@ const ProgressPage = () => {
   const { data: exerciseLists, isLoading: isLoadingExc } = useGetExercises();
   const { data: progressTraining, isLoading: isLoadingTrain } =
     useGetProgressTraining(trainingId ? +trainingId : 0);
+  const { data: progressExercise, isLoading: isLoadingExercise } =
+    useGetProgressExercise(exerciseId ? +exerciseId : 0);
 
   const isLoading = isLoadingExc || isLoadingPlans;
 
@@ -103,18 +107,30 @@ const ProgressPage = () => {
                 Select Your Progression
               </p>
             ) : (
-              <div className="flex m-4 h-full">
+              <div className="flex m-4 h-full ">
                 {activeTab === 0 && !isLoadingTrain ? (
-                  <div className="bg-slate-200 rounded-xl flex items-center justify-center w-full">
+                  <div className="bg-slate-200 rounded-xl flex py-4 items-center justify-center w-full">
                     {isLoadingTrain ? (
                       <Loader2 className="animate-spin text-prim" />
+                    ) : progressTraining?.length === 0 ? (
+                      <p className="mx-auto text-prim font-bold text-4xl">
+                        No activity detected
+                      </p>
                     ) : (
                       <Graph chartData={progressTraining || []} />
                     )}
                   </div>
                 ) : (
-                  <div className="bg-slate-200 rounded-xl flex items-center justify-center w-full">
-                    <p>d</p>
+                  <div className="bg-slate-200 rounded-xl flex py-4 items-center justify-center w-full">
+                    {isLoadingExercise ? (
+                      <Loader2 className="animate-spin text-prim" />
+                    ) : progressExercise?.length === 0 ? (
+                      <p className="mx-auto text-prim font-bold text-4xl">
+                        No activity detected
+                      </p>
+                    ) : (
+                      <GraphExercise chartData={progressExercise || []} />
+                    )}
                   </div>
                 )}
               </div>

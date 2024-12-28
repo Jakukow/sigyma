@@ -58,6 +58,7 @@ const TrainingPage = () => {
   });
 
   const onSubmit: SubmitHandler<TrainingFormSchema> = (data) => {
+    console.log("dsada");
     const payload = {
       trainingId: +params.id,
       results: data.exercises.flatMap((exercise, exerciseIndex) => {
@@ -186,7 +187,6 @@ const TrainingPage = () => {
                 <button
                   type="submit"
                   className="mt-6 py-3  px-6 w-52 prim text-white font-semibold rounded-xl shadow-md"
-                  disabled={mutate.isPending}
                 >
                   {mutate.isPending ? (
                     <Loader2 className="mx-auto animate-spin" />

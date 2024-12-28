@@ -94,6 +94,9 @@ const app = new Hono()
         .from(workoutSession)
         .where(eq(workoutSession.trainingId, +id))
         .orderBy(desc(workoutSession.workoutDate));
+      if (!sesions.length) {
+        return c.json({ exerciseList: [] });
+      }
 
       const exerciseList = await db
         .select()
@@ -103,4 +106,5 @@ const app = new Hono()
       return c.json({ exerciseList });
     }
   );
+
 export default app;
