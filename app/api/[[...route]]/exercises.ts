@@ -137,6 +137,18 @@ const app = new Hono()
         message: "Exercise edited successfully",
       });
     }
-  );
+  )
+  .get("/default", clerkMiddleware(), async (c) => {
+    const auth = getAuth(c);
+    if (!auth?.userId) {
+      return c.json({ error: "unauthorized" }, 401);
+    }
+
+    const exercisesList = await db
+      .select()
+      .from(exercises)
+      .where(eq(exercises.clerkId, "DEFAULT"));
+    return c.json({ exercisesList });
+  });
 
 export default app;

@@ -7,6 +7,7 @@ import exercises from "./exercises";
 import planlist from "./planlist";
 import workout from "./workout";
 import progress from "./progress";
+import bestExercise from "./personal-bests";
 export const runtime = "edge";
 
 const app = new Hono().basePath("/api");
@@ -19,7 +20,8 @@ const routes = app
   .route("/exercises", exercises)
   .route("/planlist", planlist)
   .route("/workout", workout)
-  .route("/progress", progress);
+  .route("/progress", progress)
+  .route("/best-exercise", bestExercise);
 
 export const GET = handle(app);
 export const POST = handle(app);

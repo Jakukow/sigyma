@@ -1,7 +1,7 @@
 interface SinglePositionProps {
   name: string;
-  unit: "kg" | "s" | "reps";
-  score: number;
+  unit: string;
+  score: number | string;
   position: number;
 }
 
@@ -16,8 +16,7 @@ export const SinglePosition = ({
       <span>{position} #</span>
       <span>{name}</span>
       <span>
-        {score}
-        {unit}
+        {score} {unit}
       </span>
     </div>
   );

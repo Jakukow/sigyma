@@ -8,7 +8,7 @@ import {
 } from "@/src/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 import { Hono } from "hono";
 import { z } from "zod";
@@ -77,7 +77,12 @@ const app = new Hono()
           const [currentBest] = await db
             .select()
             .from(exerciseBest)
-            .where(eq(exerciseBest.exerciseId, exerciseId))
+            .where(
+              and(
+                eq(exerciseBest.exerciseId, exerciseId),
+                eq(exerciseBest.clerkId, auth.userId)
+              )
+            )
             .limit(1);
 
           if (!currentBest) {
@@ -94,7 +99,12 @@ const app = new Hono()
                 bestWeight: calculated1RM,
                 achievedAt: new Date(),
               })
-              .where(eq(exerciseBest.exerciseId, exerciseId));
+              .where(
+                and(
+                  eq(exerciseBest.exerciseId, exerciseId),
+                  eq(exerciseBest.clerkId, auth.userId)
+                )
+              );
           }
         }
 

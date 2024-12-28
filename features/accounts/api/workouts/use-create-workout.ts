@@ -14,7 +14,9 @@ export const useCreateWorkout = () => {
       return await response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["workouts"] });
+      queryClient.invalidateQueries({
+        queryKey: ["workouts", "best-exercise"],
+      });
     },
     onError: () => {},
   });
