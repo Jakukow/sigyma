@@ -8,6 +8,20 @@
       "when": 1735066589977,
       "tag": "0000_far_black_bolt",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1735421724796,
+      "tag": "0001_fine_storm",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1735422411167,
+      "tag": "0002_wooden_ego",
+      "breakpoints": true
     }
   ]
 }

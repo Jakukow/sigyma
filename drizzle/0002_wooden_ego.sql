@@ -1,0 +1,1 @@
+ALTER TABLE "exercise_best" ADD COLUMN "user_id" text NOT NULL;

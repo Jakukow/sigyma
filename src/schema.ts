@@ -92,6 +92,17 @@ export const workoutResults = pgTable("workout_results", {
   weight: real("weight").notNull(),
 });
 
+export const exerciseBest = pgTable("exercise_best", {
+  id: serial("id").primaryKey(),
+  clerkId: text("user_id").notNull(),
+
+  exerciseId: integer("exercise_id")
+    .notNull()
+    .references(() => exercises.id, { onDelete: "cascade" }),
+  bestWeight: real("best_weight").notNull(),
+  achievedAt: timestamp("achieved_at").defaultNow().notNull(),
+});
+
 export const insertWorkoutResultsSchema = createInsertSchema(workoutResults);
 export const insertAccountSchema = createInsertSchema(users);
 export const insertTrainingPlansSchema = createInsertSchema(trainingPlans);

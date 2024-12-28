@@ -1,5 +1,7 @@
+import { calculate1RM } from "@/lib/utils";
 import { db } from "@/src/drizzle";
 import {
+  exerciseBest,
   insertWorkoutResultsSchema,
   workoutResults,
   workoutSession,
@@ -65,6 +67,35 @@ const app = new Hono()
 
         if (insertedResults.length === 0) {
           return c.json({ error: "Failed to insert workout results" }, 500);
+        }
+
+        for (const result of results) {
+          const { exerciseId, weight, reps } = result;
+
+          const calculated1RM = calculate1RM(weight, reps);
+
+          const [currentBest] = await db
+            .select()
+            .from(exerciseBest)
+            .where(eq(exerciseBest.exerciseId, exerciseId))
+            .limit(1);
+
+          if (!currentBest) {
+            await db.insert(exerciseBest).values({
+              clerkId: auth.userId,
+              exerciseId,
+              bestWeight: calculated1RM,
+              achievedAt: new Date(),
+            });
+          } else if (calculated1RM > currentBest.bestWeight) {
+            await db
+              .update(exerciseBest)
+              .set({
+                bestWeight: calculated1RM,
+                achievedAt: new Date(),
+              })
+              .where(eq(exerciseBest.exerciseId, exerciseId));
+          }
         }
 
         return c.json({ data: { session, results: insertedResults } });
