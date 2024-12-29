@@ -112,3 +112,22 @@ export const calculate1RM = (weight: number, reps: number): number => {
 
   return Math.round(weight / percentage);
 };
+
+export const calculateRM = (
+  weight: number,
+  reps: number,
+  targetReps: number
+): number => {
+  const percentageFunction = (reps: number): number => {
+    if (reps <= 0) return 1;
+    return 1 / (1.0278 - 0.0278 * reps);
+  };
+
+  const oneRM = weight * percentageFunction(reps);
+  const targetWeight = oneRM / percentageFunction(targetReps);
+
+  return Math.round(targetWeight);
+};
+// calculateRM(100, 8, 4) => Calculate weight for 4 reps based on 100kg for 8 reps
+// calculateRM(100, 8, 1) => Calculate 1RM based on 100kg for 8 reps
+// calculateRM(100, 8, 10) => Calculate weight for 10 reps based on 100kg for 8 reps

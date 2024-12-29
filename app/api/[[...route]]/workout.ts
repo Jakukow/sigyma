@@ -89,6 +89,8 @@ const app = new Hono()
 
           if (!currentBest) {
             await db.insert(exerciseBest).values({
+              weight: weight,
+              reps: reps,
               clerkId: auth.userId,
               exerciseId,
               bestWeight: calculated1RM,
@@ -98,6 +100,8 @@ const app = new Hono()
             await db
               .update(exerciseBest)
               .set({
+                weight: weight,
+                reps: reps,
                 bestWeight: calculated1RM,
                 achievedAt: new Date(),
               })

@@ -100,10 +100,30 @@ export const exerciseBest = pgTable("exercise_best", {
     .notNull()
     .references(() => exercises.id, { onDelete: "cascade" }),
   bestWeight: real("best_weight").notNull(),
+  weight: real("weigh").notNull(),
+  reps: integer("reps"),
   achievedAt: timestamp("achieved_at").defaultNow().notNull(),
 });
 
+export const goalExercise = pgTable("goal-exercise", {
+  id: serial("id").primaryKey(),
+  clerkId: text("user_id").notNull(),
+  exerciseId: integer("exercise_id")
+    .notNull()
+    .references(() => exercises.id, { onDelete: "cascade" }),
+
+  exerciseBestId: integer("exercise_best_id").references(
+    () => exerciseBest.id,
+    { onDelete: "cascade" }
+  ),
+  weight: real("weigh").notNull(),
+  reps: integer("reps"),
+  color: text("color").notNull(),
+  order: integer("order").notNull(),
+});
+
 export const insertWorkoutResultsSchema = createInsertSchema(workoutResults);
+export const insertGoalsSchema = createInsertSchema(goalExercise);
 export const insertAccountSchema = createInsertSchema(users);
 export const insertTrainingPlansSchema = createInsertSchema(trainingPlans);
 export const insertPlanExeciseSchema = createInsertSchema(

@@ -31,8 +31,9 @@ import {
 } from "../ui/select";
 import { useGetExercises } from "@/features/accounts/api/exercises/use-get-exercises";
 import { Loader2 } from "lucide-react";
-
-const currentScore = 20;
+import { useCreateGoal } from "@/features/accounts/api/goals/use-create-goal";
+import { useGetBestWeight } from "@/features/accounts/api/personal-bests/use-get-best-weight";
+import { calculateRM } from "@/lib/utils";
 
 const formSchema = z.object({
   exercise: z.string().min(1, {
@@ -40,16 +41,20 @@ const formSchema = z.object({
   }),
   goal: z
     .string()
-    .transform((val) => Number(val))
-    .refine((val) => !isNaN(val) && val > 0 && val > currentScore, {
-      message: `Please select a score more than your personal best ${currentScore}`,
-    }),
+    .min(1, { message: "Goal is required." })
+    .transform((value) => parseFloat(value)),
   color: z.string(),
+  reps: z
+    .string()
+    .optional()
+    .transform((value) => parseFloat(value || "1")),
 });
 
 export const CreateGoalModal = () => {
   const { data: exerciseList, isLoading: isLoadingExercise } =
     useGetExercises();
+
+  const mutation = useCreateGoal();
   const { isOpen, onClose, type } = useModal();
   const isModalOpen = isOpen && type === "createGoal";
 
@@ -58,17 +63,61 @@ export const CreateGoalModal = () => {
     defaultValues: {
       exercise: "",
       goal: 0,
+      reps: 1,
       color: "#a593f3",
     },
   });
 
-  const isLoading = form.formState.isSubmitting;
-  const onSubmit = async () => {};
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log(bestWeight);
+    const goalWeight = calculateRM(
+      +values.goal,
+      values.reps ? +values.reps : 1,
+      1
+    );
+
+    if (!bestWeight?.[0] || goalWeight > bestWeight[0].weight) {
+      mutation.mutate(
+        {
+          color: values.color,
+          weight: +values.goal,
+          reps: values.reps ? +values.reps : 1,
+          exerciseId: selectedExercise?.id || 0,
+        },
+        {
+          onSuccess: () => {
+            handleClose();
+          },
+        }
+      );
+    } else {
+      if (goalWeight <= bestWeight[0]?.weight) {
+        form.setError("goal", {
+          message: "Goal weight must be higher than the current record.",
+        });
+      }
+      if (!values.reps || +values.reps <= 0) {
+        form.setError("reps", {
+          message: "Reps must be a positive number.",
+        });
+      }
+    }
+  };
 
   const handleClose = () => {
     form.reset();
     onClose();
   };
+  const selectedExercise = exerciseList?.find(
+    (exercise) => exercise.exName === form.watch("exercise")
+  );
+  const { data: bestWeight, isLoading: isLoadingWeight } = useGetBestWeight(
+    selectedExercise?.id || 0
+  );
+
+  const isLoading =
+    form.formState.isSubmitting || isLoadingExercise || isLoadingWeight;
+
   if (isLoadingExercise) {
     return <Loader2 className="animate-spin" />;
   }
@@ -103,7 +152,7 @@ export const CreateGoalModal = () => {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {exerciseList.map((type) => (
+                        {exerciseList?.map((type) => (
                           <SelectItem
                             key={type.exName}
                             value={type.exName}
@@ -124,7 +173,7 @@ export const CreateGoalModal = () => {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="uppercase text-xs font-medium text-prim ">
-                      Goal
+                      Goal - {selectedExercise?.exUnit || "unit"}
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -139,6 +188,29 @@ export const CreateGoalModal = () => {
                   </FormItem>
                 )}
               />
+              {selectedExercise?.exUnit === "Kilograms" && (
+                <FormField
+                  control={form.control}
+                  name="reps"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="uppercase text-xs font-medium text-prim ">
+                        Goal - Reps
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isLoading}
+                          className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 resize-none"
+                          placeholder="Enter your goal"
+                          type="number"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )}
               <FormField
                 control={form.control}
                 name="color"
@@ -161,8 +233,16 @@ export const CreateGoalModal = () => {
               />
             </div>
             <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button variant="primary" disabled={isLoading}>
-                Create
+              <Button
+                variant="primary"
+                className="w-36"
+                disabled={isLoading || mutation.isPending}
+              >
+                {mutation.isPending ? (
+                  <Loader2 className="animate-spin" />
+                ) : (
+                  "Create Goal"
+                )}
               </Button>
             </DialogFooter>
           </form>
