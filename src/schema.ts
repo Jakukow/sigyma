@@ -88,7 +88,7 @@ export const workoutResults = pgTable("workout_results", {
     .notNull()
     .references(() => workoutSession.id, { onDelete: "cascade" }),
   setNumber: integer("set_number").notNull(),
-  reps: integer("reps").notNull(),
+  reps: integer("reps"),
   weight: real("weight").notNull(),
 });
 

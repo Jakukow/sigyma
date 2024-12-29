@@ -71,8 +71,10 @@ const app = new Hono()
 
         for (const result of results) {
           const { exerciseId, weight, reps } = result;
-
-          const calculated1RM = calculate1RM(weight, reps);
+          const calculated1RM =
+            reps !== undefined && reps !== null
+              ? calculate1RM(weight, reps)
+              : weight;
 
           const [currentBest] = await db
             .select()

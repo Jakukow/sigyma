@@ -15,10 +15,12 @@ const schema = z.object({
       name: z.string(),
       sets: z.array(
         z.object({
-          reps: z.preprocess(
-            (val) => Number(val),
-            z.number().min(1, { message: "Reps must be a positive number" })
-          ),
+          reps: z
+            .preprocess(
+              (val) => Number(val),
+              z.number().min(1, { message: "Reps must be a positive number" })
+            )
+            .optional(),
           weight: z.preprocess(
             (val) => Number(val),
             z.number().min(1, { message: "Weight must be a positive number" })
@@ -47,18 +49,21 @@ const TrainingPage = () => {
   } = useForm<TrainingFormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      exercises: exercsiseList.data?.map((exercise) => ({
-        name: exercise.exerciseName,
-        sets: [...Array(exercise.seriesNumber)].map(() => ({
-          reps: 0,
-          weight: 0,
-        })),
-      })),
+      exercises: exercsiseList.data
+        ? exercsiseList.data.map((exercise) => ({
+            name: exercise.exerciseName,
+            sets: Array.from({ length: exercise.seriesNumber }, () => ({
+              reps: exercise.exercisesUnit === "Seconds" ? undefined : 0,
+              weight: 0,
+            })),
+          }))
+        : [],
     },
   });
 
   const onSubmit: SubmitHandler<TrainingFormSchema> = (data) => {
-    console.log("dsada");
+    console.log("Form submitted with data:", data);
+
     const payload = {
       trainingId: +params.id,
       results: data.exercises.flatMap((exercise, exerciseIndex) => {
@@ -86,6 +91,10 @@ const TrainingPage = () => {
       },
     });
   };
+
+  if (isLoading || !exercsiseList.data) {
+    return <Loader2 className="animate-spin" />;
+  }
 
   return (
     <div className="flex justify-center items-center w-full h-full">
@@ -119,32 +128,36 @@ const TrainingPage = () => {
 
                         return (
                           <React.Fragment key={setIndex}>
-                            <li className="flex items-center space-x-4 ">
+                            <li className="flex items-center space-x-4">
                               <span className="font-medium text-gray-700 w-20">
                                 Series {setIndex + 1}:
                               </span>
-                              <Controller
-                                control={control}
-                                name={`exercises.${exIndex}.sets.${setIndex}.reps`}
-                                render={({ field }) => (
-                                  <div className="flex items-center space-x-2">
-                                    <input
-                                      {...field}
-                                      type="number"
-                                      className={`w-16 p-2 border appearance-none rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
-          ${
-            errors.exercises?.[exIndex]?.sets?.[setIndex]?.reps
-              ? "border-red-500 focus:ring-red-400"
-              : "focus:ring-blue-400"
-          }`}
-                                    />
-                                    <span className="text-gray-600">
-                                      reps x
-                                    </span>
-                                  </div>
-                                )}
-                              />
-
+                              {exercise.exercisesUnit !== "Seconds" && (
+                                <Controller
+                                  control={control}
+                                  name={`exercises.${exIndex}.sets.${setIndex}.reps`}
+                                  render={({ field }) => (
+                                    <div className="flex items-center space-x-2">
+                                      <input
+                                        {...field}
+                                        type="number"
+                                        value={field.value ?? 0}
+                                        className={`w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
+                                          ${
+                                            errors.exercises?.[exIndex]?.sets?.[
+                                              setIndex
+                                            ]?.weight
+                                              ? "border-red-500 focus:ring-red-400"
+                                              : "focus:ring-blue-400"
+                                          }`}
+                                      />
+                                    </div>
+                                  )}
+                                />
+                              )}
+                              {exercise.exercisesUnit !== "Seconds" && (
+                                <span className="text-gray-600">reps x</span>
+                              )}{" "}
                               <Controller
                                 control={control}
                                 name={`exercises.${exIndex}.sets.${setIndex}.weight`}
@@ -170,7 +183,9 @@ const TrainingPage = () => {
                             {previousSet && (
                               <li>
                                 <p className="text-xs text-right text-muted-foreground">
-                                  Previous: {previousSet.reps} reps x{" "}
+                                  Previous:{" "}
+                                  {previousSet.reps &&
+                                    `${previousSet.reps} reps x`}{" "}
                                   {previousSet.weight} {exercise.exercisesUnit}
                                 </p>
                               </li>
@@ -186,7 +201,7 @@ const TrainingPage = () => {
               <div className="flex justify-between">
                 <button
                   type="submit"
-                  className="mt-6 py-3  px-6 w-52 prim text-white font-semibold rounded-xl shadow-md"
+                  className="mt-6 py-3 px-6 w-52 prim text-white font-semibold rounded-xl shadow-md"
                 >
                   {mutate.isPending ? (
                     <Loader2 className="mx-auto animate-spin" />

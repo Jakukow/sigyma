@@ -21,7 +21,7 @@ import { ChartConfig, ChartContainer } from "./ui/chart";
 
 interface ProgressExercise {
   date: string;
-  reps: number;
+  reps?: number | null;
   weight: number;
 }
 
@@ -37,6 +37,69 @@ export const GraphExercise = ({
       </div>
     );
   }
+
+  // Sanityzacja danych
+  const sanitizedData = chartData
+    .filter((entry) => {
+      const isValidDate = !isNaN(new Date(entry.date).getTime());
+      const isValidWeight =
+        typeof entry.weight === "number" && entry.weight > 0;
+      return isValidDate && isValidWeight;
+    })
+    .map((entry) => ({
+      ...entry,
+      reps: entry.reps ?? 1,
+    }));
+
+  if (sanitizedData.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-gray-500">No valid data available to display.</p>
+      </div>
+    );
+  }
+
+  // Sprawdzenie typu ćwiczenia
+  const isEnduranceExercise = sanitizedData.every(
+    (entry) => entry.reps === null || entry.reps === 1
+  );
+
+  const chartTitle = isEnduranceExercise
+    ? "Exercise Duration Chart"
+    : "Exercise Progress Chart";
+
+  const chartDescription = isEnduranceExercise
+    ? "Duration over Time"
+    : "Weight over Time";
+
+  const tooltipContent = (payload: any[], label: string | number) => {
+    if (!payload || payload.length === 0) return null;
+
+    const { weight, reps } = payload[0].payload;
+
+    return (
+      <div className="bg-white p-2 rounded shadow-md border">
+        <p>
+          <strong>Date:</strong> {new Date(label).toLocaleDateString()}
+        </p>
+        {!isEnduranceExercise && (
+          <p>
+            <strong>Weight:</strong> {weight} kg
+          </p>
+        )}
+        {isEnduranceExercise ? (
+          <p>
+            <strong>Duration:</strong> {weight} seconds
+          </p>
+        ) : (
+          <p>
+            <strong>Reps:</strong> {reps}
+          </p>
+        )}
+      </div>
+    );
+  };
+
   const chartConfig = {
     desktop: {
       label: "Desktop",
@@ -47,13 +110,13 @@ export const GraphExercise = ({
   return (
     <Card className="w-full h-full mx-4">
       <CardHeader>
-        <CardTitle>Exercise Progress Chart</CardTitle>
-        <CardDescription>Weight over Time</CardDescription>
+        <CardTitle>{chartTitle}</CardTitle>
+        <CardDescription>{chartDescription}</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer className="w-full" config={chartConfig}>
           <LineChart
-            data={chartData}
+            data={sanitizedData}
             width={500}
             height={300}
             margin={{
@@ -73,26 +136,7 @@ export const GraphExercise = ({
             />
             <YAxis />
             <Tooltip
-              content={({ payload, label }) => {
-                if (!payload || payload.length === 0) return null;
-
-                const { weight, reps } = payload[0].payload;
-
-                return (
-                  <div className="bg-white p-2 rounded shadow-md border">
-                    <p>
-                      <strong>Date:</strong>{" "}
-                      {new Date(label).toLocaleDateString()}
-                    </p>
-                    <p>
-                      <strong>Weight:</strong> {weight} kg
-                    </p>
-                    <p>
-                      <strong>Reps:</strong> {reps}
-                    </p>
-                  </div>
-                );
-              }}
+              content={({ payload, label }) => tooltipContent(payload, label)}
             />
             <Line
               dataKey="weight"

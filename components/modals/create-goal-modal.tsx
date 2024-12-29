@@ -29,7 +29,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { exerciseList } from "@/lib/constants";
+import { useGetExercises } from "@/features/accounts/api/exercises/use-get-exercises";
+import { Loader2 } from "lucide-react";
 
 const currentScore = 20;
 
@@ -47,6 +48,8 @@ const formSchema = z.object({
 });
 
 export const CreateGoalModal = () => {
+  const { data: exerciseList, isLoading: isLoadingExercise } =
+    useGetExercises();
   const { isOpen, onClose, type } = useModal();
   const isModalOpen = isOpen && type === "createGoal";
 
@@ -66,6 +69,9 @@ export const CreateGoalModal = () => {
     form.reset();
     onClose();
   };
+  if (isLoadingExercise) {
+    return <Loader2 className="animate-spin" />;
+  }
 
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>

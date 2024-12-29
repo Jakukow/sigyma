@@ -24,7 +24,7 @@ const app = new Hono()
       const progress = await db
         .select({
           date: workoutSession.workoutDate,
-          totalVolume: sql<number>`SUM(${workoutResults.reps} * ${workoutResults.weight})`,
+          totalVolume: sql<number>`SUM(COALESCE(${workoutResults.reps}, 1) * ${workoutResults.weight})`,
         })
         .from(workoutResults)
         .innerJoin(
