@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Edit, GripHorizontal, Trash } from "lucide-react";
 import { RadialChart } from "@/components/ui/radial-chart";
 import { chartsDummy } from "@/lib/constants";
+import { useGetGoals } from "@/features/accounts/api/goals/use-get-goals";
 
 interface SortableItemProps {
   id: string;
@@ -62,6 +63,7 @@ const SortableItem = ({
 
 const GoalsPage = () => {
   const { onOpen } = useModal();
+  const { data: goalList, isLoading } = useGetGoals();
   const [items, setItems] = useState(chartsDummy);
   const [backupItems, setBackupItems] = useState([...items]);
   const [isDndEnabled, setIsDndEnabled] = useState(false);
