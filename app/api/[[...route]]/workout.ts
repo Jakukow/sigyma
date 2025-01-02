@@ -2,6 +2,7 @@ import { calculate1RM } from "@/lib/utils";
 import { db } from "@/src/drizzle";
 import {
   exerciseBest,
+  goalExercise,
   insertWorkoutResultsSchema,
   workoutResults,
   workoutSession,
@@ -109,6 +110,36 @@ const app = new Hono()
                 and(
                   eq(exerciseBest.exerciseId, exerciseId),
                   eq(exerciseBest.clerkId, auth.userId)
+                )
+              );
+          }
+
+          const [currentGoal] = await db
+            .select()
+            .from(goalExercise)
+            .where(
+              and(
+                eq(goalExercise.exerciseId, exerciseId),
+                eq(goalExercise.clerkId, auth.userId)
+              )
+            )
+            .limit(1);
+
+          const updatedBestWeight =
+            calculated1RM > (currentBest?.bestWeight || 0)
+              ? calculated1RM
+              : currentBest?.bestWeight || 0;
+
+          if (currentGoal) {
+            await db
+              .update(goalExercise)
+              .set({
+                actualweight: updatedBestWeight,
+              })
+              .where(
+                and(
+                  eq(goalExercise.exerciseId, exerciseId),
+                  eq(goalExercise.clerkId, auth.userId)
                 )
               );
           }

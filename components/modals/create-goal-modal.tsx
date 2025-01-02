@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -44,10 +45,7 @@ const formSchema = z.object({
     .min(1, { message: "Goal is required." })
     .transform((value) => parseFloat(value)),
   color: z.string(),
-  reps: z
-    .string()
-    .optional()
-    .transform((value) => parseFloat(value || "1")),
+  reps: z.number().optional(),
 });
 
 export const CreateGoalModal = () => {
@@ -83,6 +81,8 @@ export const CreateGoalModal = () => {
           weight: +values.goal,
           reps: values.reps ? +values.reps : 1,
           exerciseId: selectedExercise?.id || 0,
+          exerciseName: selectedExercise?.exName || "",
+          unit: selectedExercise?.exUnit || "",
         },
         {
           onSuccess: () => {
@@ -118,10 +118,6 @@ export const CreateGoalModal = () => {
   const isLoading =
     form.formState.isSubmitting || isLoadingExercise || isLoadingWeight;
 
-  if (isLoadingExercise) {
-    return <Loader2 className="animate-spin" />;
-  }
-
   return (
     <Dialog open={isModalOpen} onOpenChange={handleClose}>
       <DialogContent className="bg-white text-prim p-0 overflow-hidden">
@@ -130,72 +126,57 @@ export const CreateGoalModal = () => {
             Set New Goal
           </DialogTitle>
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <div className="space-y-8 px-6">
-              <FormField
-                control={form.control}
-                name="exercise"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="uppercase text-xs font-medium text-prim">
-                      Exercise
-                    </FormLabel>
-                    <Select
-                      disabled={isLoading}
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger className=" bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 capitalize outline-none">
-                          <SelectValue placeholder="Select an Exercise" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        {exerciseList?.map((type) => (
-                          <SelectItem
-                            key={type.exName}
-                            value={type.exName}
-                            className="capitalize"
-                          >
-                            {type.exName.toLowerCase()}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="goal"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="uppercase text-xs font-medium text-prim ">
-                      Goal - {selectedExercise?.exUnit || "unit"}
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 resize-none"
-                        placeholder="Enter your goal"
-                        type="number"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {selectedExercise?.exUnit === "Kilograms" && (
+        <DialogDescription className="m-auto">
+          {" "}
+          track your goals
+        </DialogDescription>
+        {isLoadingExercise ? (
+          <Loader2 className="animate-spin" />
+        ) : (
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <div className="space-y-8 px-6">
                 <FormField
                   control={form.control}
-                  name="reps"
+                  name="exercise"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="uppercase text-xs font-medium text-prim">
+                        Exercise
+                      </FormLabel>
+                      <Select
+                        disabled={isLoading}
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger className=" bg-zinc-300/50 border-0 focus:ring-0 text-black ring-offset-0 capitalize outline-none">
+                            <SelectValue placeholder="Select an Exercise" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {exerciseList?.map((type) => (
+                            <SelectItem
+                              key={type.exName}
+                              value={type.exName}
+                              className="capitalize"
+                            >
+                              {type.exName.toLowerCase()}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="goal"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel className="uppercase text-xs font-medium text-prim ">
-                        Goal - Reps
+                        Goal - {selectedExercise?.exUnit || "unit"}
                       </FormLabel>
                       <FormControl>
                         <Input
@@ -210,43 +191,67 @@ export const CreateGoalModal = () => {
                     </FormItem>
                   )}
                 />
-              )}
-              <FormField
-                control={form.control}
-                name="color"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel className="uppercase text-xs font-medium text-prim ">
-                      Chart Color
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        disabled={isLoading}
-                        className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 resize-none"
-                        type="color"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
+                {selectedExercise?.exUnit === "Kilograms" && (
+                  <FormField
+                    control={form.control}
+                    name="reps"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="uppercase text-xs font-medium text-prim ">
+                          Goal - Reps
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            disabled={isLoading}
+                            className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 resize-none"
+                            placeholder="Enter your goal"
+                            type="number"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 )}
-              />
-            </div>
-            <DialogFooter className="bg-gray-100 px-6 py-4">
-              <Button
-                variant="primary"
-                className="w-36"
-                disabled={isLoading || mutation.isPending}
-              >
-                {mutation.isPending ? (
-                  <Loader2 className="animate-spin" />
-                ) : (
-                  "Create Goal"
-                )}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
+                <FormField
+                  control={form.control}
+                  name="color"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="uppercase text-xs font-medium text-prim ">
+                        Chart Color
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          disabled={isLoading}
+                          className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:ring-offset-0 resize-none"
+                          type="color"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <DialogFooter className="bg-gray-100 px-6 py-4">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-36"
+                  disabled={isLoading || mutation.isPending}
+                >
+                  {mutation.isPending ? (
+                    <Loader2 className="animate-spin" />
+                  ) : (
+                    "Create Goal"
+                  )}
+                </Button>
+              </DialogFooter>
+            </form>
+          </Form>
+        )}
       </DialogContent>
     </Dialog>
   );

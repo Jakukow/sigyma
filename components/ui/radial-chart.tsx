@@ -39,11 +39,12 @@ export function RadialChart({
 
   return (
     <div className="flex justify-center">
-      <div className="flex m-5 flex-col items-center gap-y-2">
+      <div className="flex m-5 flex-col items-center">
         <span className="font-bold">Goal for {exerciseName}</span>
+
         <ChartContainer
           config={chartConfig}
-          className="mx-auto w-full aspect-square max-h-[250px]"
+          className="mx-auto w-full aspect-square h-[220px] max-h-[220px]"
         >
           <RadialBarChart
             data={chartData}
@@ -93,7 +94,7 @@ export function RadialChart({
             </PolarRadiusAxis>
           </RadialBarChart>
         </ChartContainer>
-        <span className="text-center">
+        <span className="text-center text-muted-foreground text-sm ">
           <span className="font-bold text-center">
             {goal - score} {unit}{" "}
           </span>

@@ -7,7 +7,7 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useState } from "react";
-import { Edit, GripHorizontal, Trash } from "lucide-react";
+import { Edit, GripHorizontal, Loader2, Trash } from "lucide-react";
 import { RadialChart } from "@/components/ui/radial-chart";
 import { chartsDummy } from "@/lib/constants";
 import { useGetGoals } from "@/features/accounts/api/goals/use-get-goals";
@@ -98,7 +98,9 @@ const GoalsPage = () => {
       handleCancel();
     }
   };
-
+  if (isLoading) {
+    return <Loader2 className="animate-spin text-prim m-auto" />;
+  }
   return (
     <div className="mt-11 mx-5 items-center justify-center flex w-full h-full max-h-[750px] shadow bg-white rounded-xl overflow-hidden">
       <div className="hidden md:w-1/3 h-full text-white font-bold md:flex prim">
@@ -125,13 +127,15 @@ const GoalsPage = () => {
       </div>
       <div className="w-full md:w-2/3 h-full flex flex-col bg-white">
         <div className="prim w-full p-5 flex items-center gap-x-3 justify-between">
-          <div className="flex gap-x-3">
-            <span className="text-white/80 tracking-wider">Edit Layout</span>
-            <Switch
-              checked={isDndEnabled}
-              onCheckedChange={handleSwitchChange}
-            />
-          </div>
+          {goalList?.length >= 2 && (
+            <div className="flex gap-x-3">
+              <span className="text-white/80 tracking-wider">Edit Layout</span>
+              <Switch
+                checked={isDndEnabled}
+                onCheckedChange={handleSwitchChange}
+              />
+            </div>
+          )}
           {isDndEnabled ? (
             <div className="flex justify-end gap-3">
               <Button
@@ -155,50 +159,54 @@ const GoalsPage = () => {
           )}
         </div>
         <div className="flex m-4 h-full">
-          <div className="bg-slate-200 rounded-xl w-full p-4 overflow-y-scroll no-scrollbar h-[650px]">
-            {isDndEnabled ? (
-              <DndContext onDragEnd={handleDragEnd}>
-                <SortableContext items={items}>
-                  <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
-                    {items.map((goal) => (
-                      <SortableItem
-                        key={goal.id}
-                        id={goal.id}
-                        isDraggable={isDndEnabled}
-                        isDndEnabled={isDndEnabled}
-                      >
-                        <RadialChart
-                          exerciseName={goal.exerciseName}
-                          score={goal.score}
-                          color={goal.color}
-                          unit={goal.unit}
-                          goal={goal.goal}
-                        />
-                      </SortableItem>
-                    ))}
-                  </div>
-                </SortableContext>
-              </DndContext>
-            ) : (
-              <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
-                {items.map((goal) => (
-                  <SortableItem
-                    key={goal.id}
-                    id={goal.id}
-                    isDraggable={isDndEnabled}
-                  >
-                    <RadialChart
-                      exerciseName={goal.exerciseName}
-                      score={goal.score}
-                      color={goal.color}
-                      unit={goal.unit}
-                      goal={goal.goal}
-                    />
-                  </SortableItem>
-                ))}
-              </div>
-            )}
-          </div>
+          {goalList?.length === 0 ? (
+            <p className="m-auto text-prim font-bold text-4xl">No goals</p>
+          ) : (
+            <div className="bg-slate-200 rounded-xl w-full p-4 overflow-y-scroll no-scrollbar h-[650px]">
+              {isDndEnabled ? (
+                <DndContext onDragEnd={handleDragEnd}>
+                  <SortableContext items={items}>
+                    <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
+                      {goalList?.map((goal) => (
+                        <SortableItem
+                          key={goal.id}
+                          id={goal.id.toString()}
+                          isDraggable={isDndEnabled}
+                          isDndEnabled={isDndEnabled}
+                        >
+                          <RadialChart
+                            exerciseName={goal.exerciseName}
+                            score={goal.actualweight || 0}
+                            color={goal.color}
+                            unit={goal.unit}
+                            goal={goal.weight}
+                          />
+                        </SortableItem>
+                      ))}
+                    </div>
+                  </SortableContext>
+                </DndContext>
+              ) : (
+                <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
+                  {goalList?.map((goal) => (
+                    <SortableItem
+                      key={goal.id}
+                      id={goal.id.toString()}
+                      isDraggable={isDndEnabled}
+                    >
+                      <RadialChart
+                        exerciseName={goal.exerciseName}
+                        score={goal.actualweight || 0}
+                        color={goal.color}
+                        unit={goal.unit}
+                        goal={goal.weight}
+                      />
+                    </SortableItem>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>

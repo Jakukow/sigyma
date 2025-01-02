@@ -112,14 +112,13 @@ export const goalExercise = pgTable("goal-exercise", {
     .notNull()
     .references(() => exercises.id, { onDelete: "cascade" }),
 
-  exerciseBestId: integer("exercise_best_id").references(
-    () => exerciseBest.id,
-    { onDelete: "cascade" }
-  ),
   weight: real("weigh").notNull(),
+  unit: text("unit").notNull(),
+  exerciseName: text("ex-name").notNull(),
   reps: integer("reps"),
   color: text("color").notNull(),
   order: integer("order").notNull(),
+  actualweight: real("actual_weight"),
 });
 
 export const insertWorkoutResultsSchema = createInsertSchema(workoutResults);
