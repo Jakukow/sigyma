@@ -6,10 +6,9 @@ import Image from "next/image";
 import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Edit, GripHorizontal, Loader2, Trash } from "lucide-react";
 import { RadialChart } from "@/components/ui/radial-chart";
-import { chartsDummy } from "@/lib/constants";
 import { useGetGoals } from "@/features/accounts/api/goals/use-get-goals";
 
 interface SortableItemProps {
@@ -64,19 +63,33 @@ const SortableItem = ({
 const GoalsPage = () => {
   const { onOpen } = useModal();
   const { data: goalList, isLoading } = useGetGoals();
-  const [items, setItems] = useState(chartsDummy);
+  const [items, setItems] = useState(goalList || []);
   const [backupItems, setBackupItems] = useState([...items]);
   const [isDndEnabled, setIsDndEnabled] = useState(false);
+
+  useEffect(() => {
+    if (goalList) {
+      setItems(goalList);
+      setBackupItems(goalList);
+    }
+  }, [goalList]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      setItems((items) => {
-        const activeIndex = items.findIndex((item) => item.id === active.id);
-        const overIndex = items.findIndex((item) => item.id === over.id);
+      setItems((prevItems) => {
+        const activeIndex = prevItems.findIndex(
+          (item) => item.id.toString() === active.id.toString()
+        );
+        const overIndex = prevItems.findIndex(
+          (item) => item.id.toString() === over.id.toString()
+        );
 
-        return arrayMove(items, activeIndex, overIndex);
+        if (activeIndex !== -1 && overIndex !== -1) {
+          return arrayMove(prevItems, activeIndex, overIndex);
+        }
+        return prevItems;
       });
     }
   };
@@ -127,7 +140,7 @@ const GoalsPage = () => {
       </div>
       <div className="w-full md:w-2/3 h-full flex flex-col bg-white">
         <div className="prim w-full p-5 flex items-center gap-x-3 justify-between">
-          {goalList?.length >= 2 && (
+          {items.length >= 2 && (
             <div className="flex gap-x-3">
               <span className="text-white/80 tracking-wider">Edit Layout</span>
               <Switch
@@ -159,52 +172,34 @@ const GoalsPage = () => {
           )}
         </div>
         <div className="flex m-4 h-full">
-          {goalList?.length === 0 ? (
+          {items.length === 0 ? (
             <p className="m-auto text-prim font-bold text-4xl">No goals</p>
           ) : (
             <div className="bg-slate-200 rounded-xl w-full p-4 overflow-y-scroll no-scrollbar h-[650px]">
-              {isDndEnabled ? (
-                <DndContext onDragEnd={handleDragEnd}>
-                  <SortableContext items={items}>
-                    <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
-                      {goalList?.map((goal) => (
-                        <SortableItem
-                          key={goal.id}
-                          id={goal.id.toString()}
-                          isDraggable={isDndEnabled}
-                          isDndEnabled={isDndEnabled}
-                        >
-                          <RadialChart
-                            exerciseName={goal.exerciseName}
-                            score={goal.actualweight || 0}
-                            color={goal.color}
-                            unit={goal.unit}
-                            goal={goal.weight}
-                          />
-                        </SortableItem>
-                      ))}
-                    </div>
-                  </SortableContext>
-                </DndContext>
-              ) : (
-                <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
-                  {goalList?.map((goal) => (
-                    <SortableItem
-                      key={goal.id}
-                      id={goal.id.toString()}
-                      isDraggable={isDndEnabled}
-                    >
-                      <RadialChart
-                        exerciseName={goal.exerciseName}
-                        score={goal.actualweight || 0}
-                        color={goal.color}
-                        unit={goal.unit}
-                        goal={goal.weight}
-                      />
-                    </SortableItem>
-                  ))}
-                </div>
-              )}
+              <DndContext onDragEnd={handleDragEnd}>
+                <SortableContext
+                  items={items.map((item) => item.id.toString())}
+                >
+                  <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
+                    {items.map((goal) => (
+                      <SortableItem
+                        key={goal.id}
+                        id={goal.id.toString()}
+                        isDraggable={isDndEnabled}
+                        isDndEnabled={isDndEnabled}
+                      >
+                        <RadialChart
+                          exerciseName={goal.exerciseName}
+                          score={goal.actualweight || 0}
+                          color={goal.color}
+                          unit={goal.unit}
+                          goal={goal.weight}
+                        />
+                      </SortableItem>
+                    ))}
+                  </div>
+                </SortableContext>
+              </DndContext>
             </div>
           )}
         </div>

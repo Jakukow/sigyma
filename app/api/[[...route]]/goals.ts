@@ -74,7 +74,8 @@ const app = new Hono()
       const goalsList = await db
         .select()
         .from(goalExercise)
-        .where(eq(goalExercise.clerkId, auth.userId));
+        .where(eq(goalExercise.clerkId, auth.userId))
+        .orderBy(goalExercise.order);
 
       return c.json({ goalsList });
     }
