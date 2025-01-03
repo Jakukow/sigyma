@@ -10,6 +10,7 @@ import { zValidator } from "@hono/zod-validator";
 import { and, count, eq } from "drizzle-orm";
 
 import { Hono } from "hono";
+import { z } from "zod";
 
 const app = new Hono()
   .post(
@@ -78,6 +79,48 @@ const app = new Hono()
         .orderBy(goalExercise.order);
 
       return c.json({ goalsList });
+    }
+  )
+  .post(
+    "/change-order",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      z.array(
+        insertGoalsSchema.pick({
+          clerkId: true,
+          id: true,
+          order: true,
+        })
+      )
+    ),
+    async (c) => {
+      const auth = getAuth(c);
+
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const results = c.req.valid("json");
+
+      for (const result of results) {
+        if (!result.id) {
+          return c.json({ error: "Id missing" }, 401);
+        }
+
+        await db
+          .update(goalExercise)
+          .set({
+            order: result.order,
+          })
+          .where(
+            and(
+              eq(goalExercise.id, +result.id),
+              eq(goalExercise.clerkId, auth.userId)
+            )
+          );
+      }
+      return c.json({ results });
     }
   );
 

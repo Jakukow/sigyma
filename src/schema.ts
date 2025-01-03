@@ -128,6 +128,7 @@ export const insertTrainingPlansSchema = createInsertSchema(trainingPlans);
 export const insertPlanExeciseSchema = createInsertSchema(
   trainingPlanExercises
 );
+export const insertGoalSchema = createInsertSchema(goalExercise);
 export const insertReviewsSchema = createInsertSchema(reviews);
 export const insertMarkerSchema = createInsertSchema(markers);
 export const insertExercisesSchema = createInsertSchema(exercises);

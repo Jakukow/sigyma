@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { Edit, GripHorizontal, Loader2, Trash } from "lucide-react";
 import { RadialChart } from "@/components/ui/radial-chart";
 import { useGetGoals } from "@/features/accounts/api/goals/use-get-goals";
+import { useChangeOrder } from "@/features/accounts/api/goals/use-change-order";
 
 interface SortableItemProps {
   id: string;
@@ -62,6 +63,7 @@ const SortableItem = ({
 
 const GoalsPage = () => {
   const { onOpen } = useModal();
+  const mutation = useChangeOrder();
   const { data: goalList, isLoading } = useGetGoals();
   const [items, setItems] = useState(goalList || []);
   const [backupItems, setBackupItems] = useState([...items]);
@@ -100,6 +102,11 @@ const GoalsPage = () => {
   };
 
   const handleSave = () => {
+    console.log(items);
+    const mappedItems = items.map((item, index) => {
+      return { id: item.id, order: index + 1, clerkId: item.clerkId };
+    });
+    mutation.mutate(mappedItems);
     setBackupItems([...items]);
     setIsDndEnabled(false);
   };
@@ -155,6 +162,7 @@ const GoalsPage = () => {
                 variant="prim"
                 className="h-6 w-16 animate-fadeIn"
                 onClick={handleSave}
+                disabled={mutation.isPending}
               >
                 Save
               </Button>

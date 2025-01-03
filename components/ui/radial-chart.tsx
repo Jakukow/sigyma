@@ -95,10 +95,17 @@ export function RadialChart({
           </RadialBarChart>
         </ChartContainer>
         <span className="text-center text-muted-foreground text-sm ">
-          <span className="font-bold text-center">
-            {goal - score} {unit}{" "}
-          </span>
-          to reach your goal!
+          {goal - score <= 0 ? (
+            <p>You reached your goal!</p>
+          ) : (
+            <>
+              {" "}
+              <span className="font-bold text-center">
+                {goal - score} {unit}{" "}
+              </span>
+              to reach your goal!
+            </>
+          )}
         </span>
       </div>
     </div>
