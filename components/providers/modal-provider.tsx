@@ -10,6 +10,7 @@ import { CreateGoalModal } from "../modals/create-goal-modal";
 import { EditExerciseModal } from "../modals/edit-exercise-modal";
 import { ShowPlanExercisesModal } from "../modals/show-plan-exercises";
 import { EditTrainingModal } from "../modals/edit-training-modal";
+import { DeleteGoalModal } from "../modals/delete-goal-modal";
 
 export function ModalProvider() {
   const [isMounted, setIsMounted] = useState(false);
@@ -33,6 +34,7 @@ export function ModalProvider() {
       <WriteReviewModal />
       <CreateGoalModal />
       <EditExerciseModal />
+      <DeleteGoalModal />
     </>
   );
 }

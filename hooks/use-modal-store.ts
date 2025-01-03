@@ -10,7 +10,8 @@ export type ModalType =
   | "createGoal"
   | "editExercise"
   | "showPlanExercise"
-  | "editTraining";
+  | "editTraining"
+  | "deleteGoal";
 
 interface ModalData {
   name?: string;

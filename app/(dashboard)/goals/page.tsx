@@ -7,7 +7,7 @@ import { DndContext, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, useSortable, arrayMove } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { useEffect, useState } from "react";
-import { Edit, GripHorizontal, Loader2, Trash } from "lucide-react";
+import { GripHorizontal, Loader2, Trash } from "lucide-react";
 import { RadialChart } from "@/components/ui/radial-chart";
 import { useGetGoals } from "@/features/accounts/api/goals/use-get-goals";
 import { useChangeOrder } from "@/features/accounts/api/goals/use-change-order";
@@ -25,6 +25,8 @@ const SortableItem = ({
   isDndEnabled,
   children,
 }: SortableItemProps) => {
+  const { onOpen } = useModal();
+
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
 
@@ -32,7 +34,6 @@ const SortableItem = ({
     transform: CSS.Transform.toString(transform),
     transition,
   };
-  const { onOpen } = useModal();
 
   return (
     <div
@@ -43,11 +44,10 @@ const SortableItem = ({
       {isDndEnabled && (
         <>
           <div className="flex flex-col absolute text-white top-3 left-2 gap-y-1 animate-fadeIn z-10">
-            <Edit
-              className="prim p-1 rounded-full cursor-pointer"
-              onClick={() => onOpen("showMarker")}
+            <Trash
+              className="bg-red-600 p-1 rounded-full cursor-pointer"
+              onClick={() => onOpen("deleteGoal", { id: +id })}
             />
-            <Trash className="bg-red-600 p-1 rounded-full cursor-pointer" />
           </div>
           <GripHorizontal
             className="absolute top-3 text-muted-foreground right-2 outline-none animate-fadeIn cursor-grab"
@@ -62,8 +62,9 @@ const SortableItem = ({
 };
 
 const GoalsPage = () => {
-  const { onOpen } = useModal();
   const mutation = useChangeOrder();
+  const { onOpen } = useModal();
+
   const { data: goalList, isLoading } = useGetGoals();
   const [items, setItems] = useState(goalList || []);
   const [backupItems, setBackupItems] = useState([...items]);
@@ -188,7 +189,7 @@ const GoalsPage = () => {
                 <SortableContext
                   items={items.map((item) => item.id.toString())}
                 >
-                  <div className="grid md:grid-cols-3 grid-cols-1 gap-3">
+                  <div className="grid lg:grid-cols-3 grid-cols-1 gap-3">
                     {items.map((goal) => (
                       <SortableItem
                         key={goal.id}

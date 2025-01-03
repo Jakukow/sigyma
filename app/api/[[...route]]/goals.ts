@@ -7,7 +7,7 @@ import {
 } from "@/src/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { and, count, eq } from "drizzle-orm";
+import { and, count, eq, gt, sql } from "drizzle-orm";
 
 import { Hono } from "hono";
 import { z } from "zod";
@@ -121,6 +121,64 @@ const app = new Hono()
           );
       }
       return c.json({ results });
+    }
+  )
+  .post(
+    "/delete-goal",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      insertGoalsSchema.pick({
+        id: true,
+      })
+    ),
+    async (c) => {
+      const auth = getAuth(c);
+
+      if (!auth?.userId) {
+        return c.json({ error: "Unauthorized" }, 401);
+      }
+
+      const { id } = c.req.valid("json");
+      if (!id) {
+        return c.json({ error: "Id missing" }, 401);
+      }
+
+      const goalToDelete = await db
+        .select({
+          order: goalExercise.order,
+        })
+        .from(goalExercise)
+        .where(
+          and(eq(goalExercise.id, +id), eq(goalExercise.clerkId, auth.userId))
+        )
+        .limit(1);
+
+      if (goalToDelete.length === 0) {
+        return c.json({ error: "Goal not found" }, 404);
+      }
+
+      const { order } = goalToDelete[0];
+
+      await db
+        .delete(goalExercise)
+        .where(
+          and(eq(goalExercise.id, +id), eq(goalExercise.clerkId, auth.userId))
+        );
+
+      await db
+        .update(goalExercise)
+        .set({
+          order: sql`${goalExercise.order} - 1`,
+        })
+        .where(
+          and(
+            eq(goalExercise.clerkId, auth.userId),
+            gt(goalExercise.order, order)
+          )
+        );
+
+      return c.json({ success: true });
     }
   );
 
