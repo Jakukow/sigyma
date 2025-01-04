@@ -5,9 +5,9 @@ import {
   LayoutDashboard,
   MapPin,
   Medal,
-  PersonStanding,
   Route,
   Star,
+  History,
 } from "lucide-react";
 
 export const sidebarData = [
@@ -32,9 +32,9 @@ export const sidebarData = [
     path: "/progress",
   },
   {
-    Icon: PersonStanding,
-    label: "Friends",
-    path: "/friends",
+    Icon: History,
+    label: "History",
+    path: "/history",
   },
   {
     Icon: Medal,
