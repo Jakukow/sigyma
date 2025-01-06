@@ -2,8 +2,10 @@ import { calculate1RM } from "@/lib/utils";
 import { db } from "@/src/drizzle";
 import {
   exerciseBest,
+  exercises,
   goalExercise,
   insertWorkoutResultsSchema,
+  trainingPlans,
   workoutResults,
   workoutSession,
 } from "@/src/schema";
@@ -183,6 +185,44 @@ const app = new Hono()
 
       return c.json({ exerciseList });
     }
-  );
+  )
+  .get("/training-history", clerkMiddleware(), async (c) => {
+    const auth = getAuth(c);
+    if (!auth?.userId) {
+      return c.json({ error: "unauthorized" }, 401);
+    }
+
+    const sessions = await db
+      .select()
+      .from(workoutSession)
+      .where(eq(workoutSession.clerkId, auth.userId))
+      .leftJoin(trainingPlans, eq(workoutSession.trainingId, trainingPlans.id))
+      .orderBy(desc(workoutSession.workoutDate));
+
+    const sessionsWithResults = await Promise.all(
+      sessions.map(async (session) => {
+        const results = await db
+          .select({
+            exerciseName: exercises.exName,
+            sets: workoutResults.setNumber,
+            reps: workoutResults.reps,
+            weight: workoutResults.weight,
+          })
+          .from(workoutResults)
+          .where(
+            eq(workoutResults.workoutSessionId, session.workout_session.id)
+          )
+          .leftJoin(exercises, eq(workoutResults.exerciseId, exercises.id));
+
+        return {
+          id: session.workout_session.id,
+          name: session.trainingplans?.planName,
+          date: session.workout_session.workoutDate,
+          results,
+        };
+      })
+    );
+    return c.json({ sessions: sessionsWithResults });
+  });
 
 export default app;
