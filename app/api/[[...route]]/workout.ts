@@ -5,6 +5,7 @@ import {
   exercises,
   goalExercise,
   insertWorkoutResultsSchema,
+  insertWorkoutSessionSchema,
   trainingPlans,
   workoutResults,
   workoutSession,
@@ -259,6 +260,36 @@ const app = new Hono()
       console.error("Error fetching training history:", error);
       return c.json({ error: "Internal server error" }, 500);
     }
-  });
+  })
+  .post(
+    "/delete-session",
+    clerkMiddleware(),
+    zValidator(
+      "json",
+      insertWorkoutSessionSchema.pick({
+        id: true,
+      })
+    ),
+    async (c) => {
+      const auth = getAuth(c);
+      if (!auth?.userId) {
+        return c.json({ error: "unauthorized" }, 401);
+      }
+      const { id } = c.req.valid("json");
+
+      if (!id) {
+        return c.json({ error: "'id' is required" }, 400);
+      }
+      await db
+        .delete(workoutSession)
+        .where(
+          and(
+            eq(workoutSession.id, +id),
+            eq(workoutSession.clerkId, auth.userId)
+          )
+        );
+      return c.json({ message: "Session deleted" });
+    }
+  );
 
 export default app;

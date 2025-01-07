@@ -12,8 +12,10 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
+import { useDeleteSesion } from "@/features/accounts/api/workouts/use-delete-session";
 
 const TrainingHistoryPage = () => {
+  const mutation = useDeleteSesion();
   const sessions = useGetTrainingHistory();
   const [expandedExercise, setExpandedExercise] = useState<null | string>(null);
 
@@ -65,7 +67,7 @@ const TrainingHistoryPage = () => {
                           )
                         }
                       >
-                        <span className="font-medium">
+                        <span className="font-medium min-w-[10rem]">
                           {exercise.exerciseName}
                         </span>
                         <span className="text-gray-500">
@@ -93,9 +95,13 @@ const TrainingHistoryPage = () => {
                               className="flex justify-between items-center text-gray-700 bg-gray-50 rounded-md p-3 border border-gray-200 shadow-sm"
                             >
                               <span>Set {set.setNumber}</span>
-                              <span>
-                                {set.reps} reps @ {set.weight} kg
-                              </span>
+                              {set.reps ? (
+                                <span>
+                                  {set.reps} reps x {set.weight} kg
+                                </span>
+                              ) : (
+                                <span>{set.weight} s </span>
+                              )}
                             </li>
                           ))}
                         </motion.ul>
@@ -108,7 +114,7 @@ const TrainingHistoryPage = () => {
                   <button
                     className="flex items-center space-x-1 text-red-500 hover:text-red-700 transition-colors"
                     aria-label="Delete"
-                    onClick={() => console.log(`Delete session ${session.id}`)}
+                    onClick={() => mutation.mutate({ id: session.id })}
                   >
                     <Trash size={20} />
                     <span>Delete</span>
