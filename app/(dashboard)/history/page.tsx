@@ -115,9 +115,17 @@ const TrainingHistoryPage = () => {
                     className="flex items-center space-x-1 text-red-500 hover:text-red-700 transition-colors"
                     aria-label="Delete"
                     onClick={() => mutation.mutate({ id: session.id })}
+                    disabled={mutation.isPending}
                   >
-                    <Trash size={20} />
-                    <span>Delete</span>
+                    {mutation.isPending ? (
+                      <Loader2 className="animate-spin" size={20} />
+                    ) : (
+                      <>
+                        {" "}
+                        <Trash size={20} />
+                        <span>Delete</span>
+                      </>
+                    )}
                   </button>
                 </div>
               </li>
