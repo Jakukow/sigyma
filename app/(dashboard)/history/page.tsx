@@ -1,43 +1,21 @@
 "use client";
+import { motion } from "framer-motion";
 
+import { useState } from "react";
 import { useGetTrainingHistory } from "@/features/accounts/api/workouts/use-get-training-history";
 import { formatRelativeDate } from "@/lib/utils";
-import { Trash, History, Dumbbell, Loader2 } from "lucide-react";
+import {
+  Trash,
+  History,
+  Dumbbell,
+  Loader2,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 const TrainingHistoryPage = () => {
-  const trainingSessions = [
-    {
-      id: 1,
-      name: "Session 1",
-      date: "2025-01-04",
-      results: [
-        { exercise: "Bench Press", sets: 4, reps: 10, weight: 80 },
-        { exercise: "Squat", sets: 4, reps: 8, weight: 100 },
-        { exercise: "Deadlift", sets: 3, reps: 5, weight: 120 },
-      ],
-    },
-    {
-      id: 2,
-      name: "Session 2",
-      date: "2025-01-02",
-      results: [
-        { exercise: "Overhead Press", sets: 4, reps: 10, weight: 50 },
-        { exercise: "Pull-ups", sets: 4, reps: 12, weight: 50 },
-        { exercise: "Lunges", sets: 3, reps: 12, weight: 40 },
-      ],
-    },
-    {
-      id: 3,
-      name: "Session 2",
-      date: "2025-01-02",
-      results: [
-        { exercise: "Overhead Press", sets: 4, reps: 10, weight: 50 },
-        { exercise: "Pull-ups", sets: 4, reps: 12, weight: 50 },
-        { exercise: "Lunges", sets: 3, reps: 12, weight: 40 },
-      ],
-    },
-  ];
   const sessions = useGetTrainingHistory();
+  const [expandedExercise, setExpandedExercise] = useState<null | string>(null);
 
   if (sessions.isLoading) {
     return <Loader2 className="animate-spin m-auto text-prim" />;
@@ -48,13 +26,12 @@ const TrainingHistoryPage = () => {
       <div className="flex justify-between items-center px-6 py-4 prim border-b shadow-md">
         <h1 className="text-2xl font-bold text-white flex items-center space-x-2">
           <History className="text-white" size={24} />
-
           <span>Training History</span>
         </h1>
       </div>
 
-      <ul className="flex flex-col w-full h-[40rem] no-scrollbar  p-6 space-y-6 overflow-auto">
-        {!sessions.data
+      <ul className="flex flex-col w-full h-[40rem] no-scrollbar p-6 space-y-6 overflow-auto">
+        {!sessions.data?.length
           ? "No sessions found"
           : sessions.data.map((session) => (
               <li
@@ -72,20 +49,57 @@ const TrainingHistoryPage = () => {
                 </div>
 
                 <ul className="space-y-3">
-                  {session.results.map((result, index) => (
+                  {session.exercises.map((exercise) => (
                     <li
-                      key={index}
-                      className="flex justify-between items-center text-gray-700 bg-gray-50 rounded-md p-3 border border-gray-200 shadow-sm"
+                      key={exercise.exerciseId}
+                      className="border-b pb-4 mb-4"
                     >
-                      <span className="font-medium w-1/3">
-                        {result.exerciseName}
-                      </span>
-                      <span className="w-1/3 text-center">
-                        {result.sets} sets x {result.reps} reps
-                      </span>
-                      <span className="w-1/3 text-right font-semibold text-gray-800">
-                        {result.weight} kg
-                      </span>
+                      <div
+                        className="flex justify-between items-center cursor-pointer"
+                        onClick={() =>
+                          setExpandedExercise(
+                            expandedExercise ===
+                              `${session.id}-${exercise.exerciseId}`
+                              ? null
+                              : `${session.id}-${exercise.exerciseId}`
+                          )
+                        }
+                      >
+                        <span className="font-medium">
+                          {exercise.exerciseName}
+                        </span>
+                        <span className="text-gray-500">
+                          {exercise.totalSets} sets
+                        </span>
+                        {expandedExercise ===
+                        `${session.id}-${exercise.exerciseId}` ? (
+                          <ChevronUp className="text-gray-500" size={20} />
+                        ) : (
+                          <ChevronDown className="text-gray-500" size={20} />
+                        )}
+                      </div>
+                      {expandedExercise ===
+                        `${session.id}-${exercise.exerciseId}` && (
+                        <motion.ul
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-3 space-y-2 overflow-hidden"
+                        >
+                          {exercise.series.map((set, index) => (
+                            <li
+                              key={index}
+                              className="flex justify-between items-center text-gray-700 bg-gray-50 rounded-md p-3 border border-gray-200 shadow-sm"
+                            >
+                              <span>Set {set.setNumber}</span>
+                              <span>
+                                {set.reps} reps @ {set.weight} kg
+                              </span>
+                            </li>
+                          ))}
+                        </motion.ul>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -94,7 +108,7 @@ const TrainingHistoryPage = () => {
                   <button
                     className="flex items-center space-x-1 text-red-500 hover:text-red-700 transition-colors"
                     aria-label="Delete"
-                    onClick={() => console.log(sessions.data)}
+                    onClick={() => console.log(`Delete session ${session.id}`)}
                   >
                     <Trash size={20} />
                     <span>Delete</span>

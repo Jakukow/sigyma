@@ -11,7 +11,7 @@ import {
 } from "@/src/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { zValidator } from "@hono/zod-validator";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 
 import { Hono } from "hono";
 import { z } from "zod";
@@ -189,40 +189,76 @@ const app = new Hono()
   .get("/training-history", clerkMiddleware(), async (c) => {
     const auth = getAuth(c);
     if (!auth?.userId) {
-      return c.json({ error: "unauthorized" }, 401);
+      return c.json({ error: "Unauthorized" }, 401);
     }
 
-    const sessions = await db
-      .select()
-      .from(workoutSession)
-      .where(eq(workoutSession.clerkId, auth.userId))
-      .leftJoin(trainingPlans, eq(workoutSession.trainingId, trainingPlans.id))
-      .orderBy(desc(workoutSession.workoutDate));
+    try {
+      const sessions = await db
+        .select({
+          id: workoutSession.id,
+          workoutDate: workoutSession.workoutDate,
+          planName: trainingPlans.planName,
+        })
+        .from(workoutSession)
+        .where(eq(workoutSession.clerkId, auth.userId))
+        .leftJoin(
+          trainingPlans,
+          eq(workoutSession.trainingId, trainingPlans.id)
+        )
+        .orderBy(desc(workoutSession.workoutDate));
 
-    const sessionsWithResults = await Promise.all(
-      sessions.map(async (session) => {
-        const results = await db
-          .select({
-            exerciseName: exercises.exName,
-            sets: workoutResults.setNumber,
-            reps: workoutResults.reps,
-            weight: workoutResults.weight,
-          })
-          .from(workoutResults)
-          .where(
-            eq(workoutResults.workoutSessionId, session.workout_session.id)
-          )
-          .leftJoin(exercises, eq(workoutResults.exerciseId, exercises.id));
+      if (!sessions.length) {
+        return c.json({ sessions: [] });
+      }
 
-        return {
-          id: session.workout_session.id,
-          name: session.trainingplans?.planName,
-          date: session.workout_session.workoutDate,
-          results,
-        };
-      })
-    );
-    return c.json({ sessions: sessionsWithResults });
+      const sessionsWithDetails = await Promise.all(
+        sessions.map(async (session) => {
+          const exerciseSummary = await db
+            .select({
+              exerciseId: workoutResults.exerciseId,
+              exerciseName: exercises.exName,
+              totalSets: sql<number>`COUNT(${workoutResults.setNumber})`,
+            })
+            .from(workoutResults)
+            .where(eq(workoutResults.workoutSessionId, session.id))
+            .leftJoin(exercises, eq(workoutResults.exerciseId, exercises.id))
+            .groupBy(workoutResults.exerciseId, exercises.exName);
+
+          const detailedExercises = await Promise.all(
+            exerciseSummary.map(async (exercise) => {
+              const seriesDetails = await db
+                .select({
+                  setNumber: workoutResults.setNumber, // Poprawiona nazwa kolumny
+                  reps: workoutResults.reps,
+                  weight: workoutResults.weight,
+                })
+                .from(workoutResults)
+                .where(
+                  and(
+                    eq(workoutResults.workoutSessionId, session.id),
+                    eq(workoutResults.exerciseId, exercise.exerciseId)
+                  )
+                )
+                .orderBy(workoutResults.setNumber); // Poprawiona nazwa kolumny
+
+              return { ...exercise, series: seriesDetails };
+            })
+          );
+
+          return {
+            id: session.id,
+            name: session.planName,
+            date: session.workoutDate,
+            exercises: detailedExercises,
+          };
+        })
+      );
+
+      return c.json({ sessions: sessionsWithDetails });
+    } catch (error) {
+      console.error("Error fetching training history:", error);
+      return c.json({ error: "Internal server error" }, 500);
+    }
   });
 
 export default app;

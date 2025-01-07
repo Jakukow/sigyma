@@ -187,3 +187,12 @@ body {
   opacity: 0;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
+
+.transition-all {
+  transition: all 0.3s ease-in-out;
+}
+
+.max-h-0 {
+  max-height: 0;
+  opacity: 0;
+}
