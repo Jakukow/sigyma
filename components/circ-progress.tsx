@@ -15,10 +15,10 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
   size = 120,
   value,
   maxValue,
-  unit = "",
   strokeWidth = 10,
   color = "#a593f3",
   duration = 500,
+  unit = "",
 }) => {
   const [displayValue, setDisplayValue] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -84,7 +84,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         textAnchor="middle"
         className="text-xl font-semibold text-gray-700"
       >
-        {`${displayValue}${unit}`}
+        {`${displayValue}`}
       </text>
       <text
         x="50%"
@@ -93,7 +93,9 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
         textAnchor="middle"
         className="text-sm text-gray-500"
       >
-        {`/ ${maxValue}${unit}`}
+        {`/ ${maxValue} ${
+          unit === "Kilograms" ? "Kg" : unit === "Seconds" ? "s" : "reps"
+        } `}
       </text>
     </svg>
   );

@@ -13,7 +13,7 @@ type TrainingDay = {
     planName: string;
   }[];
 };
-const daysOfWeek = [
+export const daysOfWeek = [
   "Sunday",
   "Monday",
   "Tuesday",
