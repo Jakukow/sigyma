@@ -1,10 +1,20 @@
+"use client";
 import { TodayDate } from "@/lib/utils";
-import { currentUser } from "@clerk/nextjs/server";
+import { useUser } from "@clerk/nextjs";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 
-export const Hero = async () => {
-  const user = await currentUser();
+export const Hero = () => {
+  const user = useUser();
   const todayDate = TodayDate();
+  if (!user.isLoaded) {
+    return (
+      <div className="w-full md:w-2/3 prim flex h-full justify-center border-4 border-[#9989e2] shadow rounded-3xl  ">
+        <Loader2 className="animate-spin text-white  m-auto" />
+      </div>
+    );
+  }
+
   return (
     <div className="w-full md:w-2/3 prim   border-4 border-[#9989e2] shadow rounded-3xl relative ">
       <div className="ml-10 mt-10 flex flex-col gap-y-5 ">
@@ -12,7 +22,7 @@ export const Hero = async () => {
           Welcome
         </span>
         <span className="font-bold text-white tracking-wide text-5xl">
-          {user?.fullName}!
+          {user?.user?.fullName}!
         </span>
       </div>
       <div className=" ml-10 flex h-1/2 justify-between items-end w-full ">

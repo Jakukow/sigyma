@@ -1,42 +1,38 @@
 import { db } from "@/src/drizzle";
-import { insertAccountSchema, users } from "@/src/schema";
+import { exerciseBest, goalExercise } from "@/src/schema";
 import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
-import { zValidator } from "@hono/zod-validator";
+
+import { and, desc, eq } from "drizzle-orm";
 
 import { Hono } from "hono";
 
-const app = new Hono()
-  .get("/", clerkMiddleware(), async (c) => {
-    const auth = getAuth(c);
-    if (!auth?.userId) {
-      return c.json({ error: "unauthorized" }, 401);
-    }
-    const accounts = await db
-      .select({ id: users.id, name: users.username })
-      .from(users);
-    return c.json({ accounts });
-  })
-  .post(
-    "/",
-    clerkMiddleware(),
-    zValidator("json", insertAccountSchema.pick({ username: true })),
-    async (c) => {
-      const auth = getAuth(c);
-      const { username } = c.req.valid("json");
-      if (!auth?.userId) {
-        return c.json({ error: "Unauthorized" }, 401);
-      }
-      const [data] = await db
-        .insert(users)
-        .values({
-          clerkId: auth.userId,
+const app = new Hono().get("/", clerkMiddleware(), async (c) => {
+  const auth = getAuth(c);
+  if (!auth?.userId) {
+    return c.json({ error: "unauthorized" }, 401);
+  }
 
-          username: username,
-        })
-        .returning();
-
-      return c.json({ data });
-    }
-  );
+  const goal = await db
+    .select()
+    .from(goalExercise)
+    .where(
+      and(eq(goalExercise.clerkId, auth.userId), eq(goalExercise.order, 1))
+    );
+  if (!goal.length) {
+    const leaderBoard = await db
+      .select()
+      .from(exerciseBest)
+      .where(eq(exerciseBest.exerciseId, 4124124))
+      .orderBy(desc(exerciseBest.bestWeight));
+    return c.json({ leaderBoard });
+  } else {
+    const leaderBoard = await db
+      .select()
+      .from(exerciseBest)
+      .where(eq(exerciseBest.exerciseId, goal[0].exerciseId))
+      .orderBy(desc(exerciseBest.bestWeight));
+    return c.json({ leaderBoard });
+  }
+});
 
 export default app;

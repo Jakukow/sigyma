@@ -15,7 +15,14 @@ export const useCreateWorkout = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["workouts", "best-exercise", "goals", "intensity"],
+        queryKey: [
+          "workouts",
+          "best-exercise",
+          "goals",
+          "intensity",
+          "avg",
+          "leaderboard",
+        ],
       });
     },
     onError: () => {},
