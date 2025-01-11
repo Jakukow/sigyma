@@ -3,25 +3,22 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { InferResponseType, InferRequestType } from "hono";
 
 type ResponseType = InferResponseType<
-  (typeof client.api.goals)["delete-goal"]["$post"]
+  (typeof client.api.dashboard)["update-streak"]["$post"]
 >;
 type RequestType = InferRequestType<
-  (typeof client.api.goals)["delete-goal"]["$post"]
->["json"];
+  (typeof client.api.dashboard)["update-streak"]["$post"]
+>;
 
-export const useDeleteGoal = () => {
+export const useUpdateStreak = () => {
   const queryClient = useQueryClient();
-
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async (json) => {
-      const response = await client.api.goals["delete-goal"]["$post"]({
-        json,
-      });
+    mutationFn: async () => {
+      const response = await client.api.dashboard["update-streak"]["$post"]();
 
       return await response.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["goals"] });
+      queryClient.invalidateQueries({ queryKey: ["streak"] });
     },
     onError: () => {},
   });

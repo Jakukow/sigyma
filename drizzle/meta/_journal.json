@@ -64,6 +64,20 @@
       "when": 1735828359595,
       "tag": "0008_windy_arclight",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1736545729335,
+      "tag": "0009_easy_proteus",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1736553205829,
+      "tag": "0010_familiar_penance",
+      "breakpoints": true
     }
   ]
 }

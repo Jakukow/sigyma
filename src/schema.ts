@@ -121,6 +121,14 @@ export const goalExercise = pgTable("goal-exercise", {
   actualweight: real("actual_weight"),
 });
 
+export const weekStreak = pgTable("week_streak", {
+  id: serial("id").primaryKey(),
+  clerkId: text("user_id").notNull(),
+  weekStart: timestamp("week_start").defaultNow().notNull(),
+  streakCount: integer("streak_count").default(1).notNull(),
+  lastWorkoutDate: timestamp("last_workout_date"),
+});
+
 export const insertWorkoutResultsSchema = createInsertSchema(workoutResults);
 export const insertGoalsSchema = createInsertSchema(goalExercise);
 export const insertAccountSchema = createInsertSchema(users);

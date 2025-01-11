@@ -1,0 +1,1 @@
+ALTER TABLE "week_streak" ALTER COLUMN "streak_count" SET DEFAULT 1;
