@@ -22,3 +22,4 @@ Dashboard
 Exercise List
 
 ![App Screenshot](https://i.ibb.co/YWk0w3S/Exercise-List.png)
+<img width="1024" height="1024" alt="testnet-diggers" src="https://github.com/user-attachments/assets/9d11a828-982b-45f3-9faf-5d74fb145724" />
