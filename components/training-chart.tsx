@@ -7,7 +7,16 @@ import {
   CartesianGrid,
 } from "recharts";
 
-export const TrainingProgressChart = ({ data }) => {
+interface TrainingData {
+  date: string;
+  totalVolume: number;
+}
+
+interface TrainingProgressChartProps {
+  data: TrainingData[];
+}
+
+export const TrainingProgressChart = ({ data }: TrainingProgressChartProps) => {
   return (
     <LineChart width={600} height={300} data={data}>
       <CartesianGrid strokeDasharray="3 3" />

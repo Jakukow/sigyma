@@ -39,7 +39,13 @@ const MapPage = () => {
             .addTo(map);
 
           marker.getElement().addEventListener("click", () => {
-            onOpen("showMarker", { name, description, clerkId, id, scores });
+            onOpen("showMarker", {
+              name,
+              description,
+              clerkId,
+              id,
+              scores: scores ?? undefined,
+            });
           });
         }
       );
