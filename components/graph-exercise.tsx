@@ -38,7 +38,6 @@ export const GraphExercise = ({
     );
   }
 
-  // Sanityzacja danych
   const sanitizedData = chartData
     .filter((entry) => {
       const isValidDate = !isNaN(new Date(entry.date).getTime());
@@ -59,7 +58,6 @@ export const GraphExercise = ({
     );
   }
 
-  // Sprawdzenie typu ćwiczenia
   const isEnduranceExercise = sanitizedData.every(
     (entry) => entry.reps === null || entry.reps === 1
   );
@@ -72,7 +70,10 @@ export const GraphExercise = ({
     ? "Duration over Time"
     : "Weight over Time";
 
-  const tooltipContent = (payload: any[], label: string | number) => {
+  const tooltipContent = (
+    payload: any[] | undefined,
+    label: string | number
+  ) => {
     if (!payload || payload.length === 0) return null;
 
     const { weight, reps } = payload[0].payload;
