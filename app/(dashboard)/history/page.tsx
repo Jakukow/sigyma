@@ -32,7 +32,7 @@ const TrainingHistoryPage = () => {
         </h1>
       </div>
 
-      <ul className="flex flex-col w-full h-[40rem] no-scrollbar p-6 space-y-6 overflow-auto">
+      <ul className="flex flex-col w-full h-[40rem] no-scrollbar p-2 xs:p-6 space-y-6 overflow-auto">
         {!sessions.data?.length
           ? "No sessions found"
           : sessions.data.map((session) => (
@@ -67,10 +67,10 @@ const TrainingHistoryPage = () => {
                           )
                         }
                       >
-                        <span className="font-medium min-w-[10rem]">
+                        <span className="text-sm xs:font-medium min-w-[10rem]">
                           {exercise.exerciseName}
                         </span>
-                        <span className="text-gray-500">
+                        <span className="text-gray-500 text-nowrap text-sm xs:font-medium">
                           {exercise.totalSets} sets
                         </span>
                         {expandedExercise ===
@@ -92,7 +92,7 @@ const TrainingHistoryPage = () => {
                           {exercise.series.map((set, index) => (
                             <li
                               key={index}
-                              className="flex justify-between items-center text-gray-700 bg-gray-50 rounded-md p-3 border border-gray-200 shadow-sm"
+                              className="flex text-sm xs:font-medium justify-between items-center text-gray-700 bg-gray-50 rounded-md p-3 border border-gray-200 shadow-sm"
                             >
                               <span>Set {set.setNumber}</span>
                               {set.reps ? (

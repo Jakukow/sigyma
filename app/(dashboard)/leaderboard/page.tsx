@@ -36,7 +36,7 @@ const LeaderboardPage = () => {
 
   return (
     <div className="mt-11 mx-5 items-center flex flex-col w-full h-full shadow prim rounded-xl overflow-hidden">
-      <div className="flex text-white tracking-wider mt-10 mx-4">
+      <div className="hidden xs:flex text-white tracking-wider mt-10 mx-4">
         <div className="flex-col items-center flex">
           <span>{leaderboard?.[1]?.clerkId?.slice(0, 10) || "Empty Slot"}</span>
           <Separator className="w-1/2" />
@@ -82,7 +82,7 @@ const LeaderboardPage = () => {
           />
         </div>
       </div>
-      <div className="bg-white mx-4 flex rounded-t-xl shadow h-96 max-h-96 flex-col w-[28rem] md:w-[32rem]">
+      <div className="bg-white mx-4 flex rounded-t-xl shadow h-96 max-h-96 flex-col max-w-[512px] w-full  ">
         <div className="flex justify-center items-center py-2">
           <Select
             value={selectedEx?.toString() || "none"}

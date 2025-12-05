@@ -48,12 +48,12 @@ export const ExerciseItem = ({
   return (
     <div
       className={cn(
-        "justify-between mx-2 items-center py-4 hover:opacity-70 transition-all gap-x-5 rounded-xl flex bg-white shadow",
+        "justify-between mx-2 items-center py-4 hover:opacity-70 flex-col sm:flex-row transition-all gap-x-5 rounded-xl flex bg-white shadow",
         isDeleting ? "opacity-0 scale-95 transition-all duration-500" : ""
       )}
     >
-      <div className="flex items-center w-full">
-        <div className="flex flex-shrink-0 items-center w-1/3">
+      <div className="flex items-center gap-2 sm:gap-0  w-full flex-col  sm:flex-row">
+        <div className="flex flex-shrink-0 items-center w-auto sm:w-1/3">
           <span className="ml-5 font-semibold tracking-widest text-muted-foreground">
             {name.toUpperCase()}{" "}
             <span className="text-xs text-muted-foreground font-normal">
@@ -70,7 +70,7 @@ export const ExerciseItem = ({
 
       <div
         className={cn(
-          "flex items-center mr-4 gap-x-2",
+          "flex items-center mr-4 gap-x-2 self-end sm:self-center",
           clerkId === "DEFAULT" ? "visibility-hidden pointer-events-none" : ""
         )}
       >

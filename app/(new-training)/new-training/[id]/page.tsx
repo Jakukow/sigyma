@@ -101,8 +101,8 @@ const TrainingPage = () => {
       {isLoading ? (
         <Loader2 className="animate-spin" />
       ) : (
-        <div className="h-full flex justify-center w-[40rem] items-center">
-          <div className="w-full max-w-lg mx-5 p-8 shadow bg-white rounded-3xl">
+        <div className="h-full flex justify-center max-w-[40rem] w-full items-center">
+          <div className="w-full max-w-lg mx-2 sm:mx-5 p-2 sm:p-8 shadow bg-white rounded-3xl">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">
               Complete the exercises
             </h1>
@@ -142,7 +142,7 @@ const TrainingPage = () => {
                                         {...field}
                                         type="number"
                                         value={field.value ?? 0}
-                                        className={`w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
+                                        className={` w-8 sm:w-16 p-1 sm:p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
                                           ${
                                             errors.exercises?.[exIndex]?.sets?.[
                                               setIndex
@@ -166,7 +166,7 @@ const TrainingPage = () => {
                                     <input
                                       {...field}
                                       type="number"
-                                      className={`w-16 p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
+                                      className={`w-8 sm:w-16 p-1 sm:p-2 border rounded-md text-center text-gray-700 bg-white focus:outline-none focus:ring-2 
           ${
             errors.exercises?.[exIndex]?.sets?.[setIndex]?.weight
               ? "border-red-500 focus:ring-red-400"

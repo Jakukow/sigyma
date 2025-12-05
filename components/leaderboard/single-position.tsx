@@ -12,7 +12,7 @@ export const SinglePosition = ({
   position,
 }: SinglePositionProps) => {
   return (
-    <div className="font-bold text-muted-foreground rounded-xl justify-between  flex bg-white shadow p-4">
+    <div className="font-bold text-sm  xs:text-md text-muted-foreground rounded-xl justify-between  flex bg-white shadow p-4">
       <span>{position} #</span>
       <span>{name}</span>
       <span>

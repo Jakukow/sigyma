@@ -5,7 +5,7 @@ import {
   SheetHeader,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { Menu, PlusIcon } from "lucide-react";
 import { sidebarData } from "@/lib/constants";
 import { SidebarCard } from "../sidebar/sidebar-card";
 import { useState } from "react";
@@ -22,6 +22,16 @@ export const NavbarSmall = () => {
         </SheetTrigger>
         <SheetContent side={"left"}>
           <SheetHeader className="mt-6">
+            <SidebarCard
+              data={[
+                {
+                  Icon: PlusIcon,
+                  label: "New Workout",
+                  path: "/new-training",
+                },
+              ]}
+              setOpen={setOpen}
+            />
             <SidebarCard data={sidebarData.slice(0, 4)} setOpen={setOpen} />
             <SidebarCard data={sidebarData.slice(4, 7)} setOpen={setOpen} />
             <SidebarCard data={sidebarData.slice(7, 9)} setOpen={setOpen} />

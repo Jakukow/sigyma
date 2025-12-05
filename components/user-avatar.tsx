@@ -38,9 +38,6 @@ export const UserAvatar = async () => {
           <LogOut />
           <SignOutButton />
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings /> Profile Settings
-        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
