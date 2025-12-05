@@ -2,19 +2,19 @@
 
 **Sigyma** is an innovative fitness application blending modern technology with advanced workout planning. Designed for fitness enthusiasts of all levels, Sigyma empowers users to plan, track, and analyze their training sessions while discovering and reviewing gyms.
 
-![Logo](https://i.ibb.co/56NQXkG/logo-04.jpg)
+<img width="219" height="81" alt="image" src="https://github.com/user-attachments/assets/769cb964-40ba-4f49-919a-3fe2603eed4d" />
+
 
 ## 📱 Screenshots
 
-**Dashboard**
-![Dashboard](https://i.ibb.co/5KjDtHt/Dashboard.png)
+<img width="1921" height="958" alt="image" src="https://github.com/user-attachments/assets/5773abda-e4c1-4dc3-b237-35ba86d02757" />
+
 
 **Exercise List**
-![Exercise List](https://i.ibb.co/YWk0w3S/Exercise-List.png)
+<img width="1918" height="957" alt="image" src="https://github.com/user-attachments/assets/07420865-93bc-4970-8b68-5ed17c8602be" />
 
-<div align="center">
-  <img width="600" alt="Additional Features" src="https://github.com/user-attachments/assets/9d11a828-982b-45f3-9faf-5d74fb145724" />
-</div>
+
+
 
 ## 🚀 Key Features
 
