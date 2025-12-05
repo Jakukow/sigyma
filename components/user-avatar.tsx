@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { Avatar, AvatarFallback } from "./ui/avatar";
-import { Loader2, LogOut, Settings } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
