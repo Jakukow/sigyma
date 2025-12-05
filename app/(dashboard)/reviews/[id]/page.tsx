@@ -57,10 +57,10 @@ const Review = () => {
 
   return (
     <div className="mt-11 mx-5 items-center flex w-full h-full shadow bg-white rounded-xl overflow-hidden">
-      <div className="w-1/3 justify-center items-center flex flex-col gap-6 prim h-full text-white">
+      <div className="w-1/3 min-w-[290px] justify-center items-center hidden md:flex flex-col gap-6 prim h-full text-white">
         {reviews.isLoading || marker.isLoading ? (
           <Loader2 className="animate-spin" />
-        ) : marker.data && marker.data.length > 0 ? ( // Sprawdzenie czy dane są dostępne
+        ) : marker.data && marker.data.length > 0 ? (
           <>
             <div className="flex flex-col items-center gap-3">
               <h1 className="font-semibold text-6xl">
@@ -111,7 +111,7 @@ const Review = () => {
           <p className="text-center">No data available</p>
         )}
       </div>
-      <div className="w-2/3 flex flex-col justify-center h-full">
+      <div className="w-full md:w-2/3 flex flex-col justify-center h-full">
         <div className="m-4 rounded-xl flex h-[650px] bg-slate-200">
           <div className="m-4 flex w-full">
             {reviews.isLoading ? (

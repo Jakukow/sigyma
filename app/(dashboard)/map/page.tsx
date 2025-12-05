@@ -62,10 +62,10 @@ const MapPage = () => {
   }, [gymMarkers.data, onOpen]);
 
   return (
-    <div className="mt-11 mx-5 items-center justify-center flex  w-full h-full shadow bg-white rounded-xl overflow-hidden relative">
+    <div className="mt-11 mx-5  flex sm:flex-row flex-col w-full sm:h-full h-[630px] shadow bg-white rounded-xl overflow-hidden relative">
       <GymList mapRef={mapRef} />
 
-      <div id="map" className=" flex w-3/4 h-full" />
+      <div id="map" className=" flex w-full sm:w-3/4 h-full" />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 import Image from "next/image";
 
 import { UserAvatar } from "../user-avatar";
-import { NavbarButtons } from "./header-buttons";
 import { NavbarSmall } from "./navbar-small";
 
 export const Header = () => {
@@ -16,8 +15,6 @@ export const Header = () => {
         className="ml-5 hover:cursor-pointer"
       />
       <div className="mr-5 flex items-center md:gap-x-6">
-        <NavbarButtons />
-
         <UserAvatar />
       </div>
     </header>

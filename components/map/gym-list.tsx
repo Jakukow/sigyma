@@ -13,7 +13,7 @@ export const GymList = ({ mapRef }: GymListProp) => {
 
   if (markers.isPending) {
     return (
-      <div className="flex w-1/4 h-full flex-col border-r-4">
+      <div className="flex sm:min-w-[310px] w-full sm:w-1/4 h-full flex-col border-r-4">
         <div className="font-semibold tracking-widest text-white py-6 prim flex justify-center items-center bg-white">
           GYM LIST
         </div>
@@ -25,11 +25,11 @@ export const GymList = ({ mapRef }: GymListProp) => {
   }
 
   return (
-    <div className="flex w-1/4 h-full flex-col border-r-4">
+    <div className="flex w-full sm:w-1/4 sm:min-w-[310px]  sm:h-full flex-col border-r-4">
       <div className="font-semibold tracking-widest text-white py-6 prim flex justify-center items-center bg-white">
         GYM LIST
       </div>
-      <div className="m-2 flex bg-slate-100 rounded-xl  h-[600px]">
+      <div className="m-2 flex bg-slate-100 rounded-xl h-[165px] sm:h-[600px]">
         {markers.data?.length === 0 ? (
           <div className="text-prim self-center mx-auto">
             No gym has been listed yet!

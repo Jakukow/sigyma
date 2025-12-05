@@ -27,10 +27,10 @@ export const SingleReview = ({
   username,
 }: SingleReviewProps) => {
   return (
-    <div className="bg-white shadow flex gap-x-2  w-full py-5 rounded-xl">
-      <div className="flex flex-col ml-5 gap-y-2 w-1/2">
-        <div className="flex items-center gap-x-4">
-          <h3 className="font-semibold text-lg w-40">{title}</h3>
+    <div className="bg-white shadow flex sm:flex-row flex-col gap-y-5 gap-x-2  w-full py-5 rounded-xl">
+      <div className="flex flex-col px-2 sm:px-0 sm:ml-5 gap-y-2 w-full sm:w-1/2">
+        <div className="flex items-center w-full justify-between sm:w-auto gap-x-4">
+          <h3 className="font-semibold text-lg ">{title}</h3>
           <ReviewStars
             overallscore={`${overall}`}
             size={1.25}
@@ -43,8 +43,8 @@ export const SingleReview = ({
         <p className="text-sm text-gray-600">{body}</p>
         <span className="text-xs text-gray-500">{username}</span>
       </div>
-      <div className="flex w-1/2 flex-col mr-5 justify-center items-center ">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4  w-full gap-x-5">
+      <div className="flex w-full sm:w-1/2 flex-col mr-5 justify-center items-center ">
+        <div className="grid  grid-cols-2 xs:grid-cols-4 sm:grid-cols-2 2xl:grid-cols-4 gap-y-4  w-full sm:gap-x-5">
           <ReviewCircle number={comfort} label="Comfort" />
           <ReviewCircle number={cleanliness} label="Cleanliness" />
           <ReviewCircle number={equipment} label="Equipment" />

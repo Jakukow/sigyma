@@ -10,6 +10,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        xs: "400px",
+      },
       keyframes: {
         fadeIn: {
           "0%": { opacity: "0" },

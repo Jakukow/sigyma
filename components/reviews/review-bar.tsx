@@ -10,7 +10,7 @@ export const ReviewBar = ({ label, value }: ReviewBarProps) => {
     <div className="flex justify-end items-center gap-6">
       <span className="tracking-wider font-light">{label}:</span>
       <div className="flex  items-center  gap-3">
-        <Progress className="w-36" value={value * 20} />
+        <Progress className="w-20 xl:w-36" value={value * 20} />
         <span className="min-w-[20px] text-center">{value}</span>
       </div>
     </div>

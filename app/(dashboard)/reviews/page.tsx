@@ -46,8 +46,8 @@ const ReviewsPage = () => {
         </CommandList>
       </CommandDialog>
       <div className="mt-11 mx-5 items-center flex flex-col w-full h-full shadow bg-white rounded-xl overflow-hidden">
-        <div className="bg-slate-400 py-5 relative prim flex w-full items-center   justify-center">
-          <span className="text-white uppercase md:flex hidden tracking-widest font-semibold absolute left-5">
+        <div className="bg-slate-400 py-5  prim flex w-full items-center   justify-between ">
+          <span className="mx-4 text-white uppercase md:flex hidden tracking-widest font-semibold ">
             FIND YOUR BEST PLACE TO WORKOUT
           </span>
           <button
@@ -66,7 +66,7 @@ const ReviewsPage = () => {
             <Loader2 className="animate-spin text-prim self-center mx-auto" />
           ) : !!markers.data ? (
             <ScrollArea className="m-4 h-[600px] w-full">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {markers.data.map((review) => (
                   <GymItemReview
                     key={review.id}

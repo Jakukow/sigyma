@@ -6,10 +6,12 @@ interface ReveiwCircleProps {
 export const ReviewCircle = ({ number, label }: ReveiwCircleProps) => {
   return (
     <div className="flex flex-col items-center gap-y-2">
-      <div className="prim aspect-square size-6 p-5 rounded-xl  flex items-center justify-center text-white font-medium">
+      <div className="prim aspect-square size-1 sm:size-6 p-4 sm:p-5 rounded-xl  flex items-center justify-center text-white font-medium">
         {number}
       </div>
-      <span className="text-sm tracking-wider text-slate-500">{label}</span>
+      <span className="text-xs sm:text-sm tracking-wider text-slate-500">
+        {label}
+      </span>
     </div>
   );
 };
