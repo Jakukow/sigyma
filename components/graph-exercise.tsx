@@ -71,10 +71,12 @@ export const GraphExercise = ({
     : "Weight over Time";
 
   const tooltipContent = (
-    payload: any[] | undefined,
+    payload: { payload?: ProgressExercise }[] | undefined,
     label: string | number
   ) => {
-    if (!payload || payload.length === 0) return null;
+    if (!payload || payload.length === 0 || !payload[0].payload) {
+      return null;
+    }
 
     const { weight, reps } = payload[0].payload;
 
